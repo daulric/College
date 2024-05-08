@@ -1,0 +1,13 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+
+    cout  << "Name: Ulric Aird" << endl;
+    cout << "College Major: Information Technology" << endl;
+    cout << "Address: Palmiste" << "\nCity: Gouyave" << "\nState: St. John" << "\nZIP Code: 12345" << endl;
+    cout << "Telephone Number: 473-459-8218" << endl;
+    return 0;
+
+}

@@ -1,0 +1,13 @@
+Declare double profit_percent;
+Declare double profit_gain;
+Declare double projected_sales;
+
+profit_percent = 0.23;
+
+// Getting Inputs
+Display "Enter Total Amount of Sales: ";
+Input projected_sales;
+
+// Calculating
+profit_gain = (projected_sales * profit_percent);
+Display "Profit Made is $", profit_gain;

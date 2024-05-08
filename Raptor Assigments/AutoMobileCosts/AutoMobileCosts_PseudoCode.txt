@@ -1,0 +1,32 @@
+Declare double insurance;
+Declare double loan_payment;
+Declare double gas;
+Declare double oil;
+Declare double tires;
+Declare double maintainace;
+
+Declare double monthly_cost;
+Declare double yearly_cost;
+
+// Getting Inputs
+Display "Enter Loan Payment";
+Input loan_payment;
+Display "Enter Insurance Cost";
+Input insurance;
+Display "Enter Gas Cost";
+Input gas;
+Display "Enter Oil Cost";
+Input oil;
+Display "Enter Tires Cost";
+Input tires;
+Display "Enter Maintainance Cost";
+Input maintainance;
+
+// Calculation
+monthly_cost = loan_payment + insurance + gas + oil + tires + maintainance;
+yearly_cost = montly_cost * 12
+
+// Display Outputs
+Display "Monthly Cost: ", monthly_cost;
+Display "Yearly Cost: ", yearly_cost;
+

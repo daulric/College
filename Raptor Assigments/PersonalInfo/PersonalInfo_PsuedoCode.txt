@@ -1,0 +1,7 @@
+Display "Name: Ulric Aird";
+Display "College Major: Information Technology";
+Display "Address: Palmiste";
+Display "City: Gouyave";
+Display "State: St. John";
+Display "Telephone Number: 4598218";
+Display "Zip Code: 12345";
