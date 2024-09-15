@@ -23,7 +23,7 @@ int main() {
     cout << "Enter Height: ";
     cin >> height;
 
-    while (height < 1 || height > 8) {
+    while ( height < 1 || height > 8 ) {
         cout << "Height must be between 1 - 8: ";
         cin >> height;
     }
