@@ -1,20 +1,18 @@
 #include <iostream>
-#include <typeinfo>
-
 
 using namespace std;
 
 void create_pyramid(int height) {
     for (int i = 1; i <= height; i++) {
 
-        for (int j = 0; j < height; j++) {
+        for (int j = 0; j < height - i; j++) {
             cout << " ";
         }
-
-        for (int j = 0; j < height - 1; j++) {
+        
+        for (int j = 0; j < i; j++) {
             cout << "#";
         }
-
+        
         cout << endl;
     }
 }
