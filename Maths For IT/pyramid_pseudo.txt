@@ -1,0 +1,33 @@
+// Pseudo Code for Mario Pyramid Algorithm.
+
+Module create_pyramid(integer height) {
+
+    // Creating a first loop for each line for the pyramid
+    For ( integer i = 1; i <= height; i++ ) {
+
+        // Create another loop within the loop to generate space
+        // for the pyramid to form.
+        For (integer j = 0; j < height - i; j++) {
+            print(" ")
+        }
+
+        // Create another loop to place the '#" to generate the image
+        For (integer j = 0; j < i; j++) {
+            print("#)
+        }
+
+        EndLine(); // Creates a new line for another "#" for the pyramid
+    }
+    
+}
+
+integer height;
+Output "Enter Height: "
+Input height;
+
+While height < 1 or height > 8 {
+    Output "Height Must between 1 and 8"
+    Input height;
+}
+
+create_pyramid(height) // Outputs the mario pyramid;
