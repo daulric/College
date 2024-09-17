@@ -8,15 +8,15 @@ Module create_pyramid(integer height) {
         // Create another loop within the loop to generate space
         // for the pyramid to form.
         For (integer j = 0; j < height - i; j++) {
-            print(" ")
+            Output " ";
         }
 
         // Create another loop to place the '#" to generate the image
         For (integer j = 0; j < i; j++) {
-            print("#)
+            Output "#"
         }
 
-        EndLine(); // Creates a new line for another "#" for the pyramid
+        EndLine(); // Creates a new line for another "#" for the pyramid structure
     }
     
 }
