@@ -18,6 +18,14 @@ int find_avg(vector<int>&arr) {
     return (sum / arr.size());
 }
 
+int find_lowest(vector<int>&arr) {
+    return arr[0];
+}
+
+int find_highest(vector<int>&arr, int n) {
+    return arr[n - 1];
+}
+
 int main() {
     int n;
     cin >> n;
@@ -30,8 +38,8 @@ int main() {
 
     sort_numbers(array);
 
-    int highest = array[n-1];
-    int lowest = array[0];
+    int highest = find_highest(array, n);
+    int lowest = find_lowest(array);
     int avg = find_avg(array);
 
     cout << highest << endl;
