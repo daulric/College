@@ -1,0 +1,36 @@
+body {
+    font-family: "Lato", sans-serif;
+}
+
+table {
+    color: #333333;
+    border-spacing: none;
+    justify-content: center;
+}
+
+th {
+    color: #ffffff;
+    background-color: #90b4d6;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+table th td {
+    color: #ffffff;
+    background-color: #90b4d6;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+tr:nth-child(even) td, tr:nth-child(even) th {
+    background-color: #689ad8;
+}
+
+tbody {
+    padding: 5px 30px 5px 10px;
+    font-size: 18px;
+    margin: 0;
+    text-align: left;
+    background-color: #84b3ad;
+    width: 150px;
+}
