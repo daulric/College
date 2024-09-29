@@ -1,78 +1,130 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:100,300,400);
 
-body {
-    font-family: 'Open Sans', sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #3A4E58;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+}
+
+header {
+    background-color: #2e3d49;
     color: white;
     text-align: center;
+    padding: 2rem;
+    position: relative;
 }
-header {
-    background-color: #2F4657;
-    padding: 20px 0;
-}
-nav {
+
+nav ul {
     display: flex;
-    justify-content: center;
-    gap: 20px;
+    justify-content: start;
+    list-style: none;
+    margin-bottom: 2rem;
 }
-nav a {
-    color: white;
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #b8c1ca;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 1.1rem;
 }
-.hero {
-    padding: 100px 20px;
-}
-.hero h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-}
-.hero p {
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-.hero button {
-    background-color: #557D8D;
+
+nav ul li a:hover {
     color: white;
-    border: none;
-    padding: 10px 30px;
-    font-size: 18px;
+}
+
+.conference-details h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.conference-details p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.register-btn {
+    background-color: #265261;
+    color: white;
+    padding: 1rem 2rem;
     cursor: pointer;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border-color: white;
 }
-.section-title {
-    color: #2F4657;
-    margin: 40px 0;
+
+.register-btn:hover {
+    background-color: #265265;
 }
-.grid-container {
+
+/* Main section */
+.main-section {
+    background-color: #f8f8f8;
+    padding: 2rem 0;
+}
+
+.info-container {
     display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin: 50px 0;
-    padding: 0 20px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2rem;
 }
-.grid-item {
-    background-color: white;
-    color: #3A4E58;
-    border-radius: 10px;
-    width: 300px;
-    padding: 20px;
-    text-align: left;
+
+.info-block {
+    text-align: center;
+    width: 30%;
 }
-.grid-item img {
+
+.info-block img {
     width: 100%;
     border-radius: 10px;
+    margin-bottom: 1rem;
 }
-footer {
-    background-color: #2F4657;
+
+.info-block h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.info-block p {
+    color: #7a7a7a;
+}
+
+/* Footer section */
+.footer {
+    background-color: #2e3d49;
     color: white;
-    padding: 20px 0;
-    margin-top: 50px;
+    padding: 2rem;
 }
-footer nav {
-    margin-top: 20px;
+
+.footer p {
+    justify-content: center;
 }
-footer nav a {
-    margin: 0 10px;
+
+.footer-nav {
+    display: flex;
+    justify-content: end;
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.footer-nav li {
+    margin: 0 15px;
+}
+
+.footer-nav li a {
+    color: #b8c1ca;
+    text-decoration: none;
+}
+
+.footer-nav li a:hover {
+    color: white;
 }

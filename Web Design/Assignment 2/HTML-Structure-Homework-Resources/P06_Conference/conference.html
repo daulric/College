@@ -1,59 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Styles Conference</title>
-        <link rel="stylesheet" href="conference.css">
-    </head>
-    <body>
-        <header>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">Speakers</a>
-                <a href="#">Schedule</a>
-                <a href="#">Venue</a>
-                <a href="#">Register</a>
-            </nav>
-        </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styles Conference</title>
+    <link rel="stylesheet" href="conference.css">
+</head>
+<body>
 
-        <section class="hero">
-            <h1>STYLES CONFERENCE</h1>
+    <!-- Header Section -->
+    <header class="header">
+        <nav>
+            <ul class="nav-list">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Speakers</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Venue</a></li>
+                <li><a href="#">Register</a></li>
+            </ul>
+        </nav>
+        <div class="conference-details">
+            <h1>Styles Conference</h1>
             <p>Dedicated to the Craft of Building Websites</p>
             <p>Every year the brightest web designers and front-end developers descend on Chicago to discuss the latest technologies. Join us this August!</p>
-            <button>REGISTER NOW</button>
-        </section>
+            <button class="register-btn">Register Now</button>
+        </div>
+    </header>
 
-        <section>
-            <h2 class="section-title">Speakers, Schedule, Venue</h2>
-            <div class="grid-container">
-                <div class="grid-item">
-                    <img src="images/speakers.jpg" alt="Speaker">
-                    <h3>World-Class Speakers</h3>
-                    <p>Joining us from all around the world are over twenty fantastic speakers, here to share their stories.</p>
-                </div>
-                <div class="grid-item">
-                    <img src="images/schedule.jpg" alt="Schedule">
-                    <h3>Three Inspiring Days</h3>
-                    <p>Enjoy three inspiring and action-packed days of talks, gatherings, and all-around good times.</p>
-                </div>
-                <div class="grid-item">
-                    <img src="images/venue.jpg" alt="Venue">
-                    <h3>The Chicago Theatre</h3>
-                    <p>Within the heart of downtown Chicago, The Chicago Theatre will provide a beautiful conference venue.</p>
-                </div>
+    <!-- Main Content Section -->
+    <main class="main-section">
+        <div class="info-container">
+            <div class="info-block">
+                <img src="images/speakers.jpg" alt="Speaker" class="info-img">
+                <h3>World-Class Speakers</h3>
+                <p>Joining us from all around the world are over twenty fantastic speakers, here to share their stories.</p>
             </div>
-        </section>
+            <div class="info-block">
+                <img src="images/schedule.jpg" alt="Schedule" class="info-img">
+                <h3>Three Inspiring Days</h3>
+                <p>Enjoy three inspiring and action-packed days of talks, gatherings, and all-around good times.</p>
+            </div>
+            <div class="info-block">
+                <img src="images/venue.jpg" alt="Venue" class="info-img">
+                <h3>The Chicago Theatre</h3>
+                <p>Within the heart of downtown Chicago, The Chicago Theatre will provide a beautiful conference venue.</p>
+            </div>
+        </div>
+    </main>
 
-        <footer>
-            <p>© Styles Conference</p>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">Speakers</a>
-                <a href="#">Schedule</a>
-                <a href="#">Venue</a>
-                <a href="#">Register</a>
-            </nav>
-        </footer>
-    </body>
+    <footer class="footer">
+        <p>&copy styles conference</p>
+        <nav>
+            <ul class="footer-nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Speakers</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Venue</a></li>
+                <li><a href="#">Register</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+</body>
 </html>
