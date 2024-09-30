@@ -30,7 +30,7 @@ function prompt_quetion() {
                 create_pyramid(x);
                 rl.close();
             } else {
-                throw new Error("Invalid IDK")
+                throw "Invalid IDK";
             }
         } catch (e) {
             prompt_quetion();
