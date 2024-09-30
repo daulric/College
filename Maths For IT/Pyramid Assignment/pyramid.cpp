@@ -22,7 +22,6 @@ int main() {
     int height;
 
     cout << "Enter Height: ";
-    
 
     while (true) {
         cin >> height;
