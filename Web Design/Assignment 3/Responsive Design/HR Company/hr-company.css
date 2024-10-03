@@ -136,23 +136,23 @@ a:hover#menu-icon {
       height: auto;
     }
 
-}
+    #menu-icon {
+        display: inline-block;
+    }
+    
+    nav li {
+        text-align: center;
+        width: 100%;
+        padding: 10px 0;
+        margin: 0;
+    }
+    
+    nav li {
+        background: #f6f6f6;
+    }
+    
+    nav:hover ul.top-list{
+      display: block;
+    }
 
-#menu-icon {
-    display: inline-block;
-}
-
-nav li {
-    text-align: center;
-    width: 100%;
-    padding: 10px 0;
-    margin: 0;
-}
-
-nav li {
-    background: #f6f6f6;
-}
-
-nav:hover ul.top-list{
-  display: block;
 }
