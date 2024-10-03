@@ -17,13 +17,18 @@ void insertion_sort(int arr[], int size) {
 }
 
 int main() {
-    int arr[10] = {19, 373, 0, 3,2, 3, 20,3, 9, 33};
+    int arr[5];
     int size = sizeof(arr) / sizeof(int);
 
+    for (int i = 0; i < 5; i++) {
+        cin >> arr[i];
+    }
+
     insertion_sort(arr, size);
+    cout << "------------------" << endl;
 
     for (int i = 0; i < size; i++) {
-        cout << arr[i] << endl;
+        cout << arr[i] << " ";
     }
 
 }
