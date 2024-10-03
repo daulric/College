@@ -1,0 +1,14 @@
+Module has_same_characters(string str1, string str2) {
+
+    // Check if the string lengths are the same;
+    if (str1.length not equals str2.length) {
+        return false;
+    }
+
+    // We split the string, sort it and join them together to find a match;
+    string sortedStr1 = str1.split('').sort().join('');
+    string sortedStr2 = str2.split('').sort().join('');
+
+    // return true or false if string matches the other string.
+    return sortedStr1 == sortedStr2;
+}
