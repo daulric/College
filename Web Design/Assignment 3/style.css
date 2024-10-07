@@ -2,7 +2,8 @@ body {
     font-family: 'Nunito', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #8bc34a;
+    background-color: #e6d09f;
+    color: black;
 }
 
 .container {
@@ -12,7 +13,7 @@ body {
 }
 
 .section {
-    background-color: #8bc34a;
+    background-color: #e6d09f;
     color: white;
     padding: 20px;
     margin-bottom: 20px;
@@ -63,6 +64,7 @@ img {
 
 .nav a:hover {
     background-color: rgba(255,255,255,0.2);
+    border-radius: 5px;
 }
 
 /* Updated form styles */
@@ -79,12 +81,12 @@ input, button {
     border: 1px solid #ffffff;
     border-radius: 5px;
     background-color: rgba(255,255,255,0.1);
-    color: white;
+    color: rgb(49, 49, 49);
     font-family: 'Nunito', sans-serif;
 }
 
 input::placeholder {
-    color: rgba(255,255,255,0.7);
+    color: rgb(52, 52, 52);
 }
 
 input:focus {
@@ -94,7 +96,7 @@ input:focus {
 }
 
 button {
-    background-color: #689f38;
+    background-color: #efbf59;
     color: white;
     border: none;
     padding: 10px;
@@ -103,5 +105,5 @@ button {
 }
 
 button:hover {
-    background-color: #558b2f;
+    background-color: #f0b942;
 }
