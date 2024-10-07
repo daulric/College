@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalico Supermarket</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="nav">
+        <div class="container">
+            <a href="#home">Home</a>
+            <a href="#community">Community</a>
+            <a href="#tips">Tips</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+
+    
+    <div class="container">
+        <div id="home" class="section">
+            <br><br>
+            <h1>Kalico Supermarket</h1>
+            <h2>Get Your Food From Us</h2>
+            <br>
+            <h2 class="heading" >Our Vision</h2>
+            <p>To be the leader in sustainable grocery shopping, offering fresh, local products while promoting healthy lifestyles and environmental responsibility.</p>
+            <h2>Goal</h2>
+            <p>Provide fresh, locally-sourced products, promote sustainability, support local farmers, and be the top choice for health-conscious shoppers.</p>
+            <img src="assets/image.png" alt="Local produce">
+            <img src="assets/image 2.png" alt="Supermarket aisle">
+        </div>
+
+        <div id="community" class="section">
+            <br><br>
+            <h2 class="heading">Kalico Supermarket Community Statement</h2>
+            <p>At Kalico Supermarket, we believe in nourishing more than just bodies – we're committed to nurturing the very heart of our community. As your local grocery partner, we strive to be a pillar of support, sustainability, and connection in our neighborhood.</p>
+            <h3>Our Commitment to You</h3>
+            <p>We Provide:</p>
+            <ul>
+                <li>Quality and Affordability</li>
+                <li>Local First</li>
+                <li>Community Engagement</li>
+                <li>Sustainability</li>
+                <li>Inclusivity</li>
+                <li>Education</li>
+                <li>Employment Opportunities</li>
+                <li>Customer-Centric Approach</li>
+            </ul>
+            <img src="assets/image 3.png" alt="Customer shopping">
+        </div>
+
+        <div id="tips" class="section">
+            <br><br>
+            <h2 class="heading">Tips for Encouraging Healthy Choices in a Supermarket</h2>
+            <ul>
+                <li>Shop the Perimeter</li>
+                <li>Read Labels Carefully</li>
+                <li>Focus on Whole Foods</li>
+                <li>Prioritize Fresh Produce</li>
+                <li>Choose Lean Proteins</li>
+                <li>Opt for Whole Grains</li>
+                <li>Avoid Processed Foods</li>
+                <li>Select Healthy Snacks</li>
+                <li>Limit Sugary Beverages</li>
+                <li>Choose Low-Fat or Fat-Free Dairy</li>
+            </ul>
+            <img src="assets/image 4.png" alt="Fresh produce">
+            <img src="assets/image 5.png" alt="Supermarket produce section">
+        </div>
+
+        <div id="contact" class="section">
+            <br><br>
+            <h2 class="heading">Contact</h2>
+            <p>Location: Goyave, St. John</p>
+            <p>Contact Number: 419-7893</p>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message. We will get back to you soon!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

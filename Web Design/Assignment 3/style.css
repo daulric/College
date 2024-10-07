@@ -1,0 +1,107 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #8bc34a;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.section {
+    background-color: #8bc34a;
+    color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+.heading {
+    text-decoration: underline;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Updated navbar styles */
+.nav {
+    background-color: #689f38;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav .container {
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.nav a:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* Updated form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+input, button {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+input:focus {
+    outline: none;
+    background-color: rgba(255,255,255,0.2);
+    border-color: #ffffff;
+}
+
+button {
+    background-color: #689f38;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #558b2f;
+}
