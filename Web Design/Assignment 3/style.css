@@ -39,20 +39,25 @@ img {
     margin-bottom: 10px;
 }
 
-/* Updated navbar styles */
+/* Navbar styles */
 .nav {
     background-color: #689f38;
-    padding: 10px 0;
+    padding: 1px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: margin 0.3s ease; /* Add smooth transition */
+}
+
+.nav.pushed-down {
+    margin-bottom: 20px; /* Adjust the space when menu is active */
 }
 
 .nav .container {
     display: flex;
-    justify-content: space-around;
-    padding: 0;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav a {
@@ -65,6 +70,53 @@ img {
 .nav a:hover {
     background-color: rgba(255,255,255,0.2);
     border-radius: 5px;
+}
+
+/* Hide nav links in mobile view */
+@media (max-width: 768px) {
+    .nav a {
+        display: none;
+    }
+
+    .nav-links.active {
+        margin-bottom: 10px;
+    }
+
+    .nav .nav-links.active a {
+        display: block;
+        text-align: center;
+        padding: 15px;
+        border-bottom: 1px solid #ffffff;
+    }
+
+    .nav .nav-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+/* Desktop view */
+@media (min-width: 769px) {
+    .nav-toggle {
+        display: none;
+    }
+}
+
+/* Styles for showing the dropdown in mobile view */
+.nav-links.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* adjust based on your navbar height */
+    left: 0;
+    width: 100%;
+    background-color: #689f38;
+    align-items: center;
+    margin: 30px 0 0 -1px;
 }
 
 /* Updated form styles */

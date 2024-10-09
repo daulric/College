@@ -10,21 +10,25 @@
 <body>
     <div class="nav">
         <div class="container">
-            <a href="#home">Home</a>
-            <a href="#community">Community</a>
-            <a href="#tips">Tips</a>
-            <a href="#contact">Contact</a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#community">Community</a>
+                <a href="#tips">Tips</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                &#9776;
+            </button>
         </div>
     </div>
 
-    
     <div class="container">
         <div id="home" class="section">
             <br><br>
             <h1>Kalico Supermarket</h1>
             <h2>Get Your Food From Us</h2>
             <br>
-            <h2 class="heading" >Our Vision</h2>
+            <h2 class="heading">Our Vision</h2>
             <p>To be the leader in sustainable grocery shopping, offering fresh, local products while promoting healthy lifestyles and environmental responsibility.</p>
             <h2>Goal</h2>
             <p>Provide fresh, locally-sourced products, promote sustainability, support local farmers, and be the top choice for health-conscious shoppers.</p>
@@ -88,6 +92,23 @@
             e.preventDefault();
             alert('Thank you for your message. We will get back to you soon!');
             this.reset();
+        });
+
+        // Navbar toggle for mobile view
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const nav = document.querySelector('.nav');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Toggle between the hamburger menu and "X" for close
+            if (navLinks.classList.contains('active')) {
+                navToggle.innerHTML = '✖'; // Close icon
+                nav.classList.add('pushed-down');
+            } else {
+                navToggle.innerHTML = '&#9776;'; // Hamburger icon
+                nav.classList.remove('pushed-down');
+            }
         });
     </script>
 </body>
