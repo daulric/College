@@ -1,3 +1,5 @@
+const readline = require("readline");
+
 function contains_sameCharacters(str1, str2) {
     if (str1.length !== str2.length) return false;
 
@@ -7,15 +9,24 @@ function contains_sameCharacters(str1, str2) {
     return (sortedStr1 === sortedStr2);
 }
 
-// Get Start a time to calculate the time complexity
-const started_time = performance.now ();
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-// Prints if the 2 strings are equal or not
-const isSame = contains_sameCharacters("abcd", "dbca");
-console.log(isSame ? "They Match" : "Doesnt Match" );
+rl.question("", (item1) => {
+    rl.question("", (item2) => {
+        const str1 = item1;
+        const str2 = item2;
 
-// Get the end time
-const endTime = performance.now();
+        const isSame = contains_sameCharacters(str1, str2);
 
-// Prints the time complexity
-console.log("Took", (endTime - started_time), "to run");
+        if (isSame) {
+            console.log("YES");
+        } else {
+            console.log("NO");
+        }
+        
+        rl.close();
+    })
+})
