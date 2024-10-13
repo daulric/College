@@ -1,3 +1,5 @@
+Ulric Aird
+
 String Permutation Algorithm
 
 Step 1: Input 2 string values.
@@ -5,3 +7,5 @@ Step 2: Check if the 2 inputted values are the same length. If you return false.
 Step 3: Sort the 2 inputted values.
 Step 4: Check if the 2 sorted input values are the same.
 Step 5: If they return the same, output "YES"; if they donot match, output "NO".
+
+The time complexity is O(n * n!)
