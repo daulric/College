@@ -1,4 +1,4 @@
-function check_string_match(str1, str2) 
+local function check_string_match(str1, str2) 
     if (string.len(str1) ~= string.len(str2)) then
         return false
     end

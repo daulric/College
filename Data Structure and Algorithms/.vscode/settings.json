@@ -2,5 +2,10 @@
     "files.associations": {
         "iostream": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "Lua.diagnostics.globals": [
+        "insertion_sort",
+        "find_highest",
+        "Array"
+    ]
 }
