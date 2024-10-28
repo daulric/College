@@ -1,12 +1,12 @@
-local Node = {}
-Node.__index = Node;
+local TableViewer = require("TableViewer")
+local BinaryTreeViewer = require("BinaryTreeViewer")
 
-function Node:new(data)
-    return setmetatable({
+function CreateNode(data)
+    return {
         data = data,
         left = nil,
         right = nil,
-    }, Node)
+    }
 end
 
 local BinaryTree = {}
@@ -19,14 +19,14 @@ end
 local function insert_value(node, value)
     if (value < node.data) then
         if not (node.left) then
-            node.left = Node:new(value);
+            node.left = CreateNode(value);
         else
             insert_value(node.left, value);
         end
 
     elseif (value > node.data) then
         if not (node.right) then
-            node.right = Node:new(value);
+            node.right = CreateNode(value);
         else
             insert_value(node.right, value);
         end
@@ -35,7 +35,7 @@ end
 
 function BinaryTree:insert(data)
     if not (self.root) then
-        self.root = Node:new(data);
+        self.root = CreateNode(data);
         return;
     end
 
@@ -59,22 +59,22 @@ end
 local tree = BinaryTree:new()
 
 tree:insert(1)
+tree:insert(-1)
+tree:insert(0)
+tree:insert(9)
+tree:insert(-2)
+tree:insert(-4)
+tree:insert(-3)
 tree:insert(2)
 tree:insert(4)
 tree:insert(3)
 tree:insert(5)
-tree:insert(-1)
+tree:insert(133)
+tree:insert(14)
+tree:insert(12)
+tree:insert(13)
 
 tree:print()
 
-local function pirnt_tree(node)
-    for i, v in pairs(node) do
-        if type(v) == "table" then
-            pirnt_tree(v);
-        else
-            print(i, v, getmetatable(v));
-        end
-    end
-end
-
-pirnt_tree(tree)
+--TableViewer.view(tree, 1);
+print(BinaryTreeViewer:visualize(tree.root));

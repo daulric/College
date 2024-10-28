@@ -4,14 +4,18 @@ for i = 1, 5 do
     x[i] = tonumber(io.read())
 end
 
-table.sort(x, function (a, b)
-    return a > b
-end)
+local function largest_num(x)
+    local highest = x[1];
 
-local highest_number = x[1];
-local lowest_number = x[5];
+    for i = 2, #x do
+        if (x[i] > highest) then
+            highest = x[i];
+        end
+    end
 
-print(
-    "highest_number", highest_number,
-    "lowest_number", lowest_number
-)
+    return highest;
+end
+
+
+local highest_number = largest_num(x);
+print("highest_number", highest_number)
