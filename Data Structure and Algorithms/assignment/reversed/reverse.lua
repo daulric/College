@@ -1,16 +1,11 @@
+-- Made the Execution time a little quicker
 function ReverseItem(x)
     local item = {};
-    local reversed_item = {};
-
-    for i = 1, string.len(x) do
+    for i = string.len(x), 1, -1 do
         table.insert(item, string.sub(x, i, i));
     end
 
-    for i = string.len(x), 1, -1 do
-        table.insert(reversed_item, item[i]);
-    end
-
-    return table.concat(reversed_item, "");
+    return table.concat(item, "");
 end
 
 local x = io.read();
