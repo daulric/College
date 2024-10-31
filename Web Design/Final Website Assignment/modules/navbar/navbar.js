@@ -36,4 +36,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
-document.body.innerHTML = navbar
+document.body.innerHTML = navbar;
