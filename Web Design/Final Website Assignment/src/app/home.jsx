@@ -40,16 +40,16 @@ const CategoryItem = ({ name, icon: Icon }) => (
 export default function HomePage() {
   const [currentPromo, setCurrentPromo] = useState(0)
   const promotions = [
-    { id: 1, title: "Summer Sale! Up to 50% off", image: "/placeholder.svg?height=400&width=800" },
-    { id: 2, title: "Fresh Produce Week", image: "/placeholder.svg?height=400&width=800" },
-    { id: 3, title: "Buy 1 Get 1 Free on Selected Items", image: "/placeholder.svg?height=400&width=800" },
+    { id: 1, title: "Summer Sale! Up to 50% off", image: "/assets/ad3.jpg" },
+    { id: 2, title: "Fresh Produce Week", image: "/assets/ad1.jpg" },
+    { id: 3, title: "Buy 1 Get 1 Free on Selected Items", image: "/assets/ad2.jpg" },
   ]
 
   const featuredProducts = [
-    { id: 1, name: "Organic Bananas", price: 1.99, image: "/placeholder.svg?height=200&width=200" },
-    { id: 2, name: "Fresh Milk", price: 2.49, image: "/placeholder.svg?height=200&width=200" },
-    { id: 3, name: "Whole Grain Bread", price: 3.29, image: "/placeholder.svg?height=200&width=200" },
-    { id: 4, name: "Free Range Eggs", price: 4.99, image: "/placeholder.svg?height=200&width=200" },
+    { id: 1, name: "Organic Bananas", price: 1.99, image: "/assets/banana.jpg" },
+    { id: 2, name: "Fresh Milk", price: 2.49, image: "/assets/milk.jpg" },
+    { id: 3, name: "Whole Grain Bread", price: 3.29, image: "/assets/bread.webp" },
+    { id: 4, name: "Free Range Eggs", price: 4.99, image: "/assets/eggs.webp" },
   ]
 
   const categories = [
