@@ -1,0 +1,24 @@
+datasource db {
+    provider = "postgresql"
+    url = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  userid   Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  username String
+  orders    Order[] @relation("UserOrders") // Changed to orders for one-to-many
+}
+
+model Order {
+  orderid Int    @id @default(autoincrement())
+  userid  Int
+  items   Json
+
+  account Account @relation("UserOrders", fields: [userid], references: [userid]) // Fixed relation
+}

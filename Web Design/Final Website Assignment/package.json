@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 40 --turbopack",
+    "dev:db": "npx prisma migrate dev --name init && npm run dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npx prisma migrate deploy && npm run build && npm run start"
   },
   "dependencies": {
+    "@prisma/client": "^5.21.1",
     "lucide-react": "^0.454.0",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
