@@ -1,35 +1,47 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Menu, X, User, LogOut, Settings } from 'lucide-react'
+import { Menu, X, User, LogOut, Settings, LogIn, ShoppingCart } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import Link from 'next/link'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-function CreateLink({title, link="#", isMobile=false}) {
-    return (
-        !isMobile ? (
-            <a href={link} className="text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">{title}</a>
-        ) : (
-            <a href={link} className="text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">{title}</a>
-        )
-    )
+function CreateLink({ title, link = "#", isMobile = false }) {
+  return (
+    <Link
+      href={link}
+      className={`text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+        isMobile ? 'block' : ''
+      }`}
+    >
+      {title}
+    </Link>
+  )
 }
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dropdownRef = useRef(null)
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
 
-  const toggleProfile = () => {
-    setIsProfileOpen(!isProfileOpen)
+  const handleLogout = () => {
+    // Implement logout logic here
+    setIsLoggedIn(false)
   }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsProfileOpen(false)
+        setIsOpen(false)
       }
     }
 
@@ -40,7 +52,7 @@ export default function Navbar() {
   }, [dropdownRef])
 
   const navLinks = [
-    { title: 'Home', link: '#' },
+    { title: 'Home', link: '/' },
     { title: 'About', link: '#' },
     { title: 'Services', link: '#' },
     { title: 'Contact', link: '#' },
@@ -62,66 +74,61 @@ export default function Navbar() {
               ))}
             </div>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              <div className="relative z-50" ref={dropdownRef}>
-                <button
-                  onClick={toggleProfile}
-                  className="max-w-xs bg-[#ffffff] rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f4f4f4] focus:ring-[#4CAF50]"
-                  id="user-menu"
-                  aria-haspopup="true"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <User className="h-8 w-8 rounded-full p-1 text-[#333] hover:text-[#4CAF50] transition-colors duration-200" />
-                </button>
-                {isProfileOpen && (
-                  <div
-                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-[#ffffff] ring-1 ring-black ring-opacity-5"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="user-menu"
+          <div className="hidden md:flex items-center space-x-4">
+            <Link href="/cart" passHref>
+              <Button variant="outline" className="flex items-center">
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                <span>Order Cart</span>
+              </Button>
+            </Link>
+            {isLoggedIn ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative p-2"
                   >
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      <User className="inline-block w-4 h-4 mr-2" />
-                      Your Profile
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      <Settings className="inline-block w-4 h-4 mr-2" />
-                      Settings
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      <LogOut className="inline-block w-4 h-4 mr-2" />
-                      Sign out
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
+                    <User className="h-6 w-6 text-[#333] hover:text-[#4CAF50] transition-colors duration-200" />
+                    <span className="sr-only">Open user menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Your Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login" passHref>
+                <Button className="flex items-center">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>Log in</span>
+                </Button>
+              </Link>
+            )}
           </div>
           <div className="md:hidden">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-[#333] hover:text-[#ffffff] hover:bg-[#4CAF50] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4CAF50] transition-colors duration-200"
+              aria-label={isOpen ? "Close main menu" : "Open main menu"}
             >
-              <span className="sr-only">Open main menu</span>
               {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
+                <X className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -132,22 +139,50 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <CreateLink key={link.title} title={link.title} link={link.link} isMobile={true} />
           ))}
+          <Link href="/cart" passHref className="block w-full">
+            <Button variant="outline" className="w-full justify-start mt-2">
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              <span>Order Cart</span>
+            </Button>
+          </Link>
         </div>
         <div className="pt-4 pb-3 border-t border-[#4CAF50]">
-          <div className="flex items-center px-5">
-            <div className="flex-shrink-0">
-              <User className="h-10 w-10 rounded-full p-1 bg-[#ffffff] text-[#333]" />
+          {isLoggedIn ? (
+            <>
+              <div className="flex items-center px-5">
+                <div className="flex-shrink-0">
+                  <User className="h-10 w-10 rounded-full p-1 bg-[#ffffff] text-[#333]" />
+                </div>
+                <div className="ml-3">
+                  <div className="text-base font-medium leading-none text-[#333]">Tom Cook</div>
+                  <div className="text-sm font-medium leading-none text-[#333] opacity-75 mt-1">tom@example.com</div>
+                </div>
+              </div>
+              <div className="mt-3 px-2 space-y-1">
+                <Button variant="ghost" className="w-full justify-start">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Your Profile</span>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </Button>
+                <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign out</span>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="mt-3 px-2 space-y-1">
+              <Link href="/login" passHref className="block w-full">
+                <Button className="w-full justify-start">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>Log in</span>
+                </Button>
+              </Link>
             </div>
-            <div className="ml-3">
-              <div className="text-base font-medium leading-none text-[#333]">Tom Cook</div>
-              <div className="text-sm font-medium leading-none text-[#333] opacity-75">tom@example.com</div>
-            </div>
-          </div>
-          <div className="mt-3 px-2 space-y-1">
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-[#333] hover:text-[#ffffff] hover:bg-[#4CAF50] transition-colors duration-200">Your Profile</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-[#333] hover:text-[#ffffff] hover:bg-[#4CAF50] transition-colors duration-200">Settings</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-[#333] hover:text-[#ffffff] hover:bg-[#4CAF50] transition-colors duration-200">Sign out</a>
-          </div>
+          )}
         </div>
       </div>
     </nav>

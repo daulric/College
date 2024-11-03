@@ -8,7 +8,7 @@ import Image from 'next/image'
 const ProductCard = ({ name, price, image }) => (
   <div className="bg-white rounded-lg shadow-md overflow-hidden">
     <div className="relative w-full h-48">
-      <Image 
+      <Image
         src={image} 
         alt={name} 
         fill

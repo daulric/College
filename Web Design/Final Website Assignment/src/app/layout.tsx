@@ -6,6 +6,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
     <html lang="en">
       <body className={`overscroll-y-none`} >
         <Navbar />
+
         {children}
       </body>
     </html>
