@@ -22,3 +22,10 @@ model Order {
 
   account Account @relation("UserOrders", fields: [userid], references: [userid]) // Fixed relation
 }
+
+model Product {
+  productid Int @id @default(autoincrement())
+  ProductName String
+  Quantity Int
+  Price Decimal @db.Decimal(9, 2)
+}
