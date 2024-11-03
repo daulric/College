@@ -16,11 +16,13 @@ model Account {
 }
 
 model Order {
-  orderid Int    @id @default(autoincrement())
+  orderid String @id @default(uuid())
   userid  Int
   items   Json
+  is_checkedout Boolean @default(false)
 
-  account Account @relation("UserOrders", fields: [userid], references: [userid]) // Fixed relation
+  account Account @relation("UserOrders", fields: [userid], references: [userid])
+  Receipt Receipt[] @relation("OrderReceipt")
 }
 
 model Product {
@@ -28,4 +30,10 @@ model Product {
   ProductName String
   Quantity Int
   Price Decimal @db.Decimal(9, 2)
+}
+
+model Receipt {
+  receiptid String @id @default(uuid())
+  orderid String
+  order Order @relation("OrderReceipt", fields: [orderid], references: [orderid])
 }
