@@ -11,6 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import axios from "axios"
+import { cookieStore as Cookies } from "@/tools/cookieClient";
+
 function CreateLink({ title, link = "#", isMobile = false }) {
   return (
     <Link
@@ -26,16 +29,36 @@ function CreateLink({ title, link = "#", isMobile = false }) {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dropdownRef = useRef(null)
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function FetchUser() {
+      let userFound = sessionStorage.getItem("user_client");
+
+      if (!userFound) {
+        const {data} = await axios.get("/api/user");
+
+        if (!data.success) return;
+        sessionStorage.setItem("user_client", JSON.stringify(data.user));
+        setUser(data.user);
+      } else {
+        setUser(JSON.parse(userFound));
+      }
+
+    }
+
+    FetchUser();
+  }, [])
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
 
   const handleLogout = () => {
-    // Implement logout logic here
-    setIsLoggedIn(false)
+    sessionStorage.removeItem("user_client");
+    Cookies.remove("userid");
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -81,7 +104,7 @@ export default function Navbar() {
                 <span>Order Cart</span>
               </Button>
             </Link>
-            {isLoggedIn ? (
+            {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -147,15 +170,15 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="pt-4 pb-3 border-t border-[#4CAF50]">
-          {isLoggedIn ? (
+          {user ? (
             <>
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
                   <User className="h-10 w-10 rounded-full p-1 bg-[#ffffff] text-[#333]" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium leading-none text-[#333]">Tom Cook</div>
-                  <div className="text-sm font-medium leading-none text-[#333] opacity-75 mt-1">tom@example.com</div>
+                  <div className="text-base font-medium leading-none text-[#333]">{user.username}</div>
+                  <div className="text-sm font-medium leading-none text-[#333] opacity-75 mt-1">{user.email}</div>
                 </div>
               </div>
               <div className="mt-3 px-2 space-y-1">

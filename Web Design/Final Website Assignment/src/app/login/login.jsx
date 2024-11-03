@@ -7,10 +7,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+import axios from "axios"
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const [userInfo, setUserInfo] = useState({});
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword)
+
+  async function HandleLogin() {
+    const {data} = await axios.put("/api/auth", userInfo);
+    if (data.success) return window.location.href = "/";
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -27,7 +35,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-8">
-            <form action="#" method="POST" className="space-y-6">
+            <form action={HandleLogin} method="POST" className="space-y-6">
               <div>
                 <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
@@ -39,6 +47,10 @@ export default function LoginPage() {
                     type="email"
                     autoComplete="email"
                     required
+                    onChange={(e) => setUserInfo(prev => ({
+                      ...prev,
+                      email: e.target.value
+                    }))}
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   />
                 </div>
@@ -55,6 +67,10 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
+                    onChange={(e) => setUserInfo(prev => ({
+                      ...prev,
+                      password: e.target.value
+                    }))}
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm pr-10"
                   />
                   <button

@@ -6,11 +6,21 @@ import { Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from "axios"
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const [signupInfo, setSignupInfo] = useState({});
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword)
+
+  async function HandleSignup() {
+    const { data } = await axios.post("/api/auth", signupInfo);
+    console.log(data);
+
+    if (!data.success) return;
+    if (data.success) return window.location.href = "/";
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -27,7 +37,7 @@ export default function SignupPage() {
           </div>
 
           <div className="mt-8">
-            <form action="#" method="POST" className="space-y-6">
+            <form action={HandleSignup} method="POST" className="space-y-6">
               <div>
                 <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Full Name
@@ -38,6 +48,10 @@ export default function SignupPage() {
                     name="name"
                     type="text"
                     autoComplete="name"
+                    onChange={(e) => setSignupInfo(prev => ({
+                      ...prev,
+                      name: e.target.value
+                    }))}
                     required
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   />
@@ -54,6 +68,10 @@ export default function SignupPage() {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    onChange={(e) => setSignupInfo(prev => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))}
                     required
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   />
@@ -71,6 +89,10 @@ export default function SignupPage() {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="new-password"
                     required
+                    onChange={(e) => setSignupInfo(prev => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))}
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-primary focus:border-primary sm:text-sm pr-10"
                   />
                   <button
