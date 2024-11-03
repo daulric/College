@@ -76,9 +76,9 @@ export default function Navbar() {
 
   const navLinks = [
     { title: 'Home', link: '/' },
-    { title: 'About', link: '#' },
+    { title: 'About', link: '/about' },
     { title: 'Services', link: '#' },
-    { title: 'Contact', link: '#' },
+    { title: 'Contact', link: '/contact' },
   ]
 
   return (
@@ -87,7 +87,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-[#4CAF50]">ua store</span>
+              <Link href="/">
+                <span className="text-2xl font-bold text-[#4CAF50]">ua store</span>
+              </Link>
             </div>
           </div>
           <div className="hidden md:block">
