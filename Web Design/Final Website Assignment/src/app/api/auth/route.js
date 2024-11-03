@@ -24,7 +24,6 @@ export async function POST(request) {
             }
         })
 
-        console.log("here", created_data);
         cookieStore.set("userid", created_data.userid);
 
         return NextResponse.json({

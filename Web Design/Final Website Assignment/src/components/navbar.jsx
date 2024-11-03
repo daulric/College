@@ -76,8 +76,8 @@ export default function Navbar() {
 
   const navLinks = [
     { title: 'Home', link: '/' },
+    { title: 'Shop', link: '/shop' },
     { title: 'About', link: '/about' },
-    { title: 'Services', link: '#' },
     { title: 'Contact', link: '/contact' },
   ]
 
