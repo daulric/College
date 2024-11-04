@@ -5,6 +5,7 @@ import { ShoppingCart, Check, Search } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
 import axios from "axios";
+import { cookieStore as Cookies } from "@/tools/cookieClient";
 
 const ShopPage = () => {
   const [cart, setCart] = useState([]);
@@ -12,6 +13,17 @@ const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
+
+  async function AddExistinOrdersToDB(product) {
+    console.log("adding order")
+    const { data } = await axios.post("/api/order", {
+      userid: Number(Cookies.get("userid")),
+      product: product,
+    })
+
+    console.log(data);
+    if (!data.success) return;
+  }
 
   useEffect(() => {
     async function GetProducts() {
@@ -23,7 +35,27 @@ const ShopPage = () => {
 
     }
 
+    async function GetExistingOrders() {
+      console.log("requesting")
+      const { data } = await axios.get("/api/order", {
+        params: {
+          userid: Number(Cookies.get("userid")),
+        }
+      });
+  
+      if (!data.orders || data.orders.length === 0) return;
+  
+      data.orders.map(product => {
+        setShowConfirmation(prev => ({
+          ...prev,
+          [product.id]: true,
+        }))
+      })
+  
+    }
+
     GetProducts();
+    GetExistingOrders();
   }, [])
 
   const addToCart = (product) => {
@@ -35,6 +67,7 @@ const ShopPage = () => {
       [product.productid]: true
     }))
 
+    AddExistinOrdersToDB(product);    
     setCart(prev => ([...prev, product]))
   };
 

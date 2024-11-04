@@ -18,7 +18,7 @@ model Account {
 model Order {
   orderid String @id @default(uuid())
   userid  Int
-  items   Json
+  items   Json[]
   is_checkedout Boolean @default(false)
 
   account Account @relation("UserOrders", fields: [userid], references: [userid])
