@@ -1,66 +1,51 @@
 "use client"
 
-import React, { useState } from 'react';
-import { ShoppingCart, Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ShoppingCart, Check, Search } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
-
-const products = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    price: 199.99,
-    description: "Premium noise-canceling wireless headphones",
-    image: "/api/placeholder/400/300"
-  },
-  {
-    id: 2,
-    name: "Smart Watch",
-    price: 299.99,
-    description: "Feature-rich smartwatch with health tracking",
-    image: "/api/placeholder/400/300"
-  },
-  {
-    id: 3,
-    name: "Laptop Backpack",
-    price: 79.99,
-    description: "Water-resistant laptop backpack with USB charging port",
-    image: "/api/placeholder/400/300"
-  },
-  {
-    id: 4,
-    name: "Bluetooth Speaker",
-    price: 129.99,
-    description: "Portable waterproof bluetooth speaker",
-    image: "/api/placeholder/400/300"
-  },
-  {
-    id: 5,
-    name: "Mechanical Keyboard",
-    price: 149.99,
-    description: "RGB mechanical gaming keyboard",
-    image: "/api/placeholder/400/300"
-  },
-  {
-    id: 6,
-    name: "Wireless Mouse",
-    price: 59.99,
-    description: "Ergonomic wireless gaming mouse",
-    image: "/api/placeholder/400/300"
-  }
-];
+import axios from "axios";
 
 const ShopPage = () => {
   const [cart, setCart] = useState([]);
-  const [showConfirmation, setShowConfirmation] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState({});
+  const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
+
+  useEffect(() => {
+    async function GetProducts() {
+      const {data} = await axios.get("/api/product");
+
+      if (data.success) {
+        setProducts(data.products);
+      }
+
+    }
+
+    GetProducts();
+  }, [])
 
   const addToCart = (product) => {
-    setCart([...cart, product]);
-    setShowConfirmation(product.id);
-    setTimeout(() => {
-      setShowConfirmation(null);
-    }, 2000);
+
+    if (product.productid === true) return;
+
+    setShowConfirmation(prev => ({
+      ...prev,
+      [product.productid]: true
+    }))
+
+    setCart(prev => ([...prev, product]))
   };
+
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.ProductName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         product.Description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPrice = product.Price >= priceRange.min && product.Price <= priceRange.max;
+    return matchesSearch && matchesPrice;
+  });
+
+  console.log(products);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -78,38 +63,89 @@ const ShopPage = () => {
           </div>
         </div>
 
+        {/* Search and Filter Section */}
+        <div className="mb-8 space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <h3 className="font-semibold text-gray-700 mb-2">Price Range</h3>
+            <div className="flex items-center space-x-4">
+              <input
+                type="number"
+                placeholder="Min"
+                className="w-24 px-2 py-1 border border-gray-300 rounded-md"
+                value={priceRange.min}
+                onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
+              />
+              <span className="text-gray-500">to</span>
+              <input
+                type="number"
+                placeholder="Max"
+                className="w-24 px-2 py-1 border border-gray-300 rounded-md"
+                value={priceRange.max}
+                onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+              />
+            </div>
+            <div className="mt-2">
+              <input
+                type="range"
+                min="0"
+                max="300"
+                value={priceRange.max}
+                onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <Image
-                src={product.image} 
-                alt={product.name}
-                className="w-full h-48 object-cover"
-                height={100}
-                width={100}
-              />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h2>
-                <p className="text-gray-600 mb-4">{product.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-gray-900">${product.price}</span>
-                  <button
-                    onClick={() => addToCart(product)}
-                    className="bg-[#4CAF50] text-white px-4 py-2 rounded-lg hover:bg-[#45a049] transition-colors"
-                  >
-                    {showConfirmation === product.id ? (
-                      <div className="flex items-center">
-                        <Check className="h-5 w-5 mr-1" /> Added
-                      </div>
-                    ) : (
-                      "Add to Cart"
-                    )}
-                  </button>
+          {filteredProducts.length === 0 ? (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              No products found matching your criteria.
+            </div>
+          ) : (
+            filteredProducts.map((product) => (
+              <div key={product.productid} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <Image
+                  src={`/shop/pic-${product.productid}.webp`}
+                  alt={product.ProductName}
+                  className="w-full h-48 object-cover"
+                  height={100}
+                  width={100}
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">{product.ProductName}</h2>
+                  <p className="text-gray-600 mb-4">{product.Description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-2xl font-bold text-gray-900">${product.Price}</span>
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="bg-[#4CAF50] text-white px-4 py-2 rounded-lg hover:bg-[#45a049] transition-colors"
+                    >
+                      {showConfirmation[product.productid] ? (
+                        <div className="flex items-center">
+                          <Check className="h-5 w-5 mr-1" /> Added
+                        </div>
+                      ) : (
+                        "Add to Cart"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Floating Cart Summary */}
@@ -118,7 +154,7 @@ const ShopPage = () => {
             <Alert className="bg-[#4CAF50] text-white">
               <AlertDescription>
                 {cart.length} {cart.length === 1 ? 'item' : 'items'} in cart - Total: $
-                {cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+                {cart.reduce((sum, item) => sum + item.Price, 0).toFixed(2)}
               </AlertDescription>
             </Alert>
           </div>

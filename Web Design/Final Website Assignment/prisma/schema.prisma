@@ -28,6 +28,7 @@ model Order {
 model Product {
   productid Int @id @default(autoincrement())
   ProductName String
+  Description String @default("No Info")
   Quantity Int
   Price Decimal @db.Decimal(9, 2)
 }
