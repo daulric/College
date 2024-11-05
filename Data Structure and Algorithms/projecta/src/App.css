@@ -1,0 +1,103 @@
+.tracker-container {
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.crown {
+  font-size: 24px;
+  color: #fbbf24;
+}
+
+.add-item-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #2563eb;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.most-expensive-item {
+  background-color: #fef3c7;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+  font-weight: bold;
+  color: #d97706;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #f9fafb;
+}
+
+.highlight {
+  background-color: #fef3c7;
+  border-color: #fde68a;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: #dc2626;
+}
+
+.no-items {
+  text-align: center;
+  color: #6b7280;
+  padding: 32px;
+}
