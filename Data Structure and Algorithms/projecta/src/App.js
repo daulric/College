@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
 import './App.css';
 
+// We created the bubble sort algorithm here
+function BubbleSort_Item(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j < arr.length; j++) {
+      if (arr[j].price > arr[i].price) {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+
+  return arr;
+}
+
 const ExpensiveItemTracker = () => {
+  // Here we used a Array Data Structure 
   const [items, setItems] = useState([
     { id: 1, name: 'Rolex Watch', price: 15000 },
     { id: 2, name: 'MacBook Pro', price: 2500 },
@@ -9,13 +25,6 @@ const ExpensiveItemTracker = () => {
   ]);
 
   const [newItem, setNewItem] = useState({ name: '', price: '' });
-
-  const getMostExpensiveItem = () => {
-    return items.reduce((max, item) =>
-      item.price > max.price ? item : max,
-      { price: -Infinity }
-    );
-  };
 
   const handleAddItem = (e) => {
     e.preventDefault();
@@ -33,7 +42,7 @@ const ExpensiveItemTracker = () => {
     setItems(items.filter(item => item.id !== id));
   };
 
-  const mostExpensive = getMostExpensiveItem();
+  const mostExpensive = BubbleSort_Item(items)[0];
 
   return (
     <div className="tracker-container">
