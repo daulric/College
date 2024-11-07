@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // We created the bubble sort algorithm here
@@ -18,28 +18,40 @@ function BubbleSort_Item(arr) {
 
 const ExpensiveItemTracker = () => {
   // Here we used a Array Data Structure 
-  const [items, setItems] = useState([
-    { id: 1, name: 'Rolex Watch', price: 15000 },
-    { id: 2, name: 'MacBook Pro', price: 2500 },
-    { id: 3, name: 'Diamond Ring', price: 8000 }
-  ]);
-
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ name: '', price: '' });
+  
+  useEffect(() => {
+    console.log("running!")
+    let data = localStorage.getItem("items_list")
+    const items_list = data ? JSON.parse(data) : [];
+    setItems(items_list);
+  }, [])
 
   const handleAddItem = (e) => {
     e.preventDefault();
     if (newItem.name && newItem.price) {
-      setItems([...items, {
-        id: items.length + 1,
-        name: newItem.name,
-        price: parseFloat(newItem.price)
-      }]);
+      setItems(prev => {
+        let added_items = [...prev, {
+          id: items.length + 1,
+          name: newItem.name,
+          price: parseFloat(newItem.price)
+        }];
+
+        localStorage.setItem('items_list', JSON.stringify(added_items));
+        return added_items;
+      });
+  
       setNewItem({ name: '', price: '' });
     }
   };
 
   const handleDeleteItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
+    setItems(prev => {
+      let filtered_items = prev.filter(item => item.id !== id);
+      localStorage.setItem("items_list", JSON.stringify(filtered_items));
+      return filtered_items;
+    });
   };
 
   const mostExpensive = BubbleSort_Item(items)[0];
