@@ -27,6 +27,7 @@ export async function POST(request) {
 
     try {
         const { userid, product } = await request.json();
+        console.log(product);
 
         if (!userid) throw "No User ID Provided";
         if (!product) throw "No Product Provided";
@@ -54,12 +55,17 @@ export async function POST(request) {
             console.log("updating order");
             let updated_items = [...user_order.items];
 
-            updated_items.map(item => {
-                if (item.productid !== product.productid) {
-                    console.log("no matches; item addedd");
-                    updated_items.push(product);
-                }
-            })
+            if (updated_items.length !== 0) {
+                updated_items.map(item => {
+                    console.log(item, "helell");
+                    if (item.productid !== product.productid) {
+                        console.log("no matches; item addedd");
+                        updated_items.push(product);
+                    }
+                });
+            } else {
+                updated_items.push(product);
+            }
 
             await client.order.update({
                 where: {
@@ -72,7 +78,8 @@ export async function POST(request) {
                         set: updated_items,
                     }
                 }
-            }).catch((e) =>  {
+            }).then((item) => console.log(item))
+            .catch((e) =>  {
                 throw `Prisma Error; ${e}`
             })
 

@@ -36,19 +36,19 @@ const ShopPage = () => {
     }
 
     async function GetExistingOrders() {
-      console.log("requesting")
       const { data } = await axios.get("/api/order", {
         params: {
           userid: Number(Cookies.get("userid")),
         }
       });
   
-      if (!data.orders || data.orders.length === 0) return;
-  
+      if (!data.orders || data.orders.items.length === 0) return;
+      console.log(data.orders.items, "orders");
+
       data.orders.map(product => {
         setShowConfirmation(prev => ({
           ...prev,
-          [product.id]: true,
+          [product.ProductName]: true,
         }))
       })
   
@@ -56,16 +56,17 @@ const ShopPage = () => {
 
     GetProducts();
     GetExistingOrders();
-  }, [])
+    console.log("items added", showConfirmation);
+  }, [showConfirmation])
 
   const addToCart = (product) => {
 
-    if (product.productid === true) return;
+    if (showConfirmation[product.productid] === true) return;
 
     setShowConfirmation(prev => ({
       ...prev,
       [product.productid]: true
-    }))
+    }));
 
     AddExistinOrdersToDB(product);    
     setCart(prev => ([...prev, product]))
@@ -166,7 +167,7 @@ const ShopPage = () => {
                       onClick={() => addToCart(product)}
                       className="bg-[#4CAF50] text-white px-4 py-2 rounded-lg hover:bg-[#45a049] transition-colors"
                     >
-                      {showConfirmation[product.productid] ? (
+                      {showConfirmation[product.ProductName] ? (
                         <div className="flex items-center">
                           <Check className="h-5 w-5 mr-1" /> Added
                         </div>
