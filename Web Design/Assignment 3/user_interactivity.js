@@ -2,19 +2,19 @@
 const heroTitle = document.querySelector('.hero .container h1');
 heroTitle.textContent = 'Welcome to Kalico Supermarket';
 
-// 2. Use JavaScript to change the style of one or more elements in the website
+// 2. Use JavaScript to change the style of one or more elements in the website. Thats the navigation links.
 const navLinks = document.querySelectorAll('.nav-links li a');
 navLinks.forEach(link => {
   link.style.color = '#4CAF50';
   link.style.fontWeight = 'bold';
 });
 
-// 3. Use JavaScript to update the user interface (i.e. changing or modifying one or more elements, display type, size, other properties)
-const communitySection = document.querySelector('#community');
+// 3. Use JavaScript to update the user interface. Thats in the Tips Section
+const communitySection = document.querySelector('#tips');
 communitySection.style.backgroundColor = '#D3D3D3';
 communitySection.style.padding = '100px 0';
 
-// 4. Use JavaScript to style a group of elements together (See query selector all method)
+// 4. Use JavaScript to style a group of elements together. Thats the elements in the comminity section
 const gridItems = document.querySelectorAll('.grid-item');
 gridItems.forEach(item => {
   item.style.backgroundColor = '#DEDEDE';
@@ -30,7 +30,7 @@ gridItems.forEach(item => {
   });
 });
 
-// 5. Use JavaScript to implement a custom relevant feature of your choice to your website
+// 5. Use JavaScript to implement a custom relevant feature. The Contact Form
 const contactForm = document.getElementById('contactForm');
 contactForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -39,15 +39,12 @@ contactForm.addEventListener('submit', (e) => {
   const emailInput = document.getElementById('email');
   const messageInput = document.getElementById('message');
 
-  // Validate form inputs
   if (nameInput.value.trim() === '' || emailInput.value.trim() === '' || messageInput.value.trim() === '') {
     alert('Please fill in all the required fields.');
     return;
   }
 
-  // Display success message
   alert('Thank you for your message. We will get back to you soon!');
 
-  // Reset the form
   contactForm.reset();
 });

@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const user_id = Number(searchParams.get("userid"));
     const is_active = searchParams.get("is_purchased") === "true" ? true : false;
-
-    console.log(is_active)
 
     const client = new PrismaClient();
     const user_orders = await client.order.findMany({
@@ -27,7 +24,6 @@ export async function POST(request) {
 
     try {
         const { userid, product } = await request.json();
-        console.log(product);
 
         if (!userid) throw "No User ID Provided";
         if (!product) throw "No Product Provided";
@@ -57,7 +53,6 @@ export async function POST(request) {
 
             if (updated_items.length !== 0) {
                 updated_items.map(item => {
-                    console.log(item, "helell");
                     if (item.productid !== product.productid) {
                         console.log("no matches; item addedd");
                         updated_items.push(product);
