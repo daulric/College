@@ -1,110 +1,164 @@
-Node = {}
-Node.__index = Node;
-
-function Node:new(data)
-    return setmetatable({data = data, next=nil}, Node);
+function CreateNode(value)
+    return {
+        value = value,
+        next = nil,
+    }
 end
 
-LinkedList = {}
-LinkedList.__index = LinkedList;
+local LinkedList = {}
+LinkedList.__index = LinkedList
 
-function LinkedList:new()
-    return setmetatable({head=nil}, LinkedList);
+function LinkedList.new()
+    return setmetatable({head = nil}, LinkedList);
 end
 
-function LinkedList:insert_at_beginning(data)
-    local newNode = Node:new(data);
-    newNode.next = self.head;
-    self.head = newNode;
+function LinkedList:print()
+    local current = self.head;
+    while current do
+        io.write(tostring(current.value));
+        current = current.next;
+
+        if current ~= nil then
+            io.write("->")
+        end
+    end
+
+    io.write("\n");
 end
 
-function LinkedList:insert_at_end(data)
-    local newNode = Node:new(data);
-
-    if not self.head then
-        self.head = newNode;
+function LinkedList:add(value)
+    if self.head == nil then
+        self.head = CreateNode(value);
     else
-        local temp = self.head;
-
-        while temp.next do
-            temp = temp.next;
+        local current = self.head;
+        while current ~= nil and current.next ~= nil do
+            current = current.next;
         end
 
-        temp.next = newNode;
+        current.next = CreateNode(value);
     end
 end
 
-function LinkedList:insert_after_position(data, position)
+function LinkedList:remove(value)
+    if not self.head then return end;
 
-    if position < 0 then return; end
-
-    if position == 0 then
-        self:insert_at_beginning(data);
+    if self.head.value == value then
+        self.head = self.head.next;
         return;
     end
 
-    local newNode = Node:new(data);
-    local temp = self.head;
-    local count = 1;
+    local current = self.head;
 
-    while temp and count < position do
-        temp = temp.next;
-        count = count + 1;
+    while current ~= nil and current.next ~= nil and current.next.value ~= value do
+        current = current.next;
     end
 
-    if not temp then return; end
+    if current and current.next then
+        current.next = current.next.next;
+        return;
+    end
 
+end
+
+function LinkedList:sort(func)
+    if self.head == nil then return end;
+
+    repeat
+        local swapped = false;
+        local current = self.head;
+
+        while current ~= nil and current.next ~= nil do
+            if func(current.value, current.next.value) then
+                current.value, current.next.value = current.next.value, current.value;
+                swapped = true;
+            end
+
+            current = current.next;
+        end
+
+    until not swapped
+end
+
+function LinkedList:insert_start(value)
+    local node = CreateNode(value);
+    node.next = self.head;
+    self.head = node;
+end
+
+function LinkedList:insert_after(value, pos)
+    if pos < 1 then return end;
+
+    local newNode = CreateNode(value);
+    local temp = self.head;
+
+    if pos == 0 then
+        self:insert_start(value);
+        return;
+    end
+
+    for _ = 1, pos - 1 do
+        if not temp then return end;
+        temp = temp.next;
+    end
+
+    if not temp then return end;
     newNode.next = temp.next;
     temp.next = newNode;
 end
 
-function LinkedList:insert_before_position(data, position)
-    if (position < 0) then return end;
+function LinkedList:insert_before(value, pos)
+    local new_node = CreateNode(value);
+    local current_pos = 1;
+    local current = self.head;
+    local prev;
 
-    if (position == 0) then
-        self:insert_at_beginning(data);
-        return;
+    while current and current_pos < pos do
+        prev = current;
+        current = current.next;
+        current_pos = current_pos + 1;
     end
 
-    local NewNode = Node:new(data);
-    local temp = self.head;
-    local count = 1;
-
-    while (temp and count < position - 1) do
-        temp = temp.next;
-        count = count + 1;
-    end
-
-    if not temp then return; end
-    NewNode.next = temp.next;
-    temp.next = NewNode;
-
+    if not current then return end;
+    prev.next = new_node;
+    new_node.next = current;
 end
 
-function LinkedList:print_list()
-    local temp = self.head;
-    io.write("[");
-    while temp do
-        io.write(temp.data);
-        temp = temp.next;
-        if temp then
-            io.write(" ");
+function LinkedList:getLength()
+    if not self.head then return 0; end
+    local current = self.head;
+    local length = 1;
+
+    while current ~= nil and current.next ~= nil do
+        length = length + 1;
+        current = current.next;
+    end
+
+    return length;
+end
+
+function LinkedList:remove_duplicates()
+    if not self.head then return end;
+
+    local current = self.head;
+
+    while current do
+        local runner = current;
+
+        while runner and runner.next do
+            if runner.next.value == current.value then
+                runner.next = runner.next.next
+            else
+                runner = runner.next;
+            end
         end
+
+        current = current.next;
     end
 
-    io.write("]\n");
 end
 
-local list = LinkedList:new();
+function LinkedList:clear()
+    self.head = nil;
+end
 
-list:insert_at_beginning(2);
-list:insert_at_end(1);
-list:insert_at_end(3)
-list:insert_at_end(4);
-list:insert_after_position(5, 1)
-list:insert_after_position(6, 2)
-list:insert_after_position(7, 3)
-list:print_list();
-list:insert_before_position(9, 3)
-
-list:print_list();
+return LinkedList;

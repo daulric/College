@@ -9,6 +9,8 @@ function contains_sameCharacters(str1, str2) {
     return (sortedStr1 === sortedStr2);
 }
 
+console.log(contains_sameCharacters("abcd", "abcd"));
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

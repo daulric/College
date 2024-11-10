@@ -1,0 +1,1 @@
+console.log(9 > 0 ? "Hello": "bye")
