@@ -1,50 +1,69 @@
 'use client'
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import axios from "axios";
 
 import Image from "next/image";
 
 const ShoppingCart = () => {
   // Sample cart data - in a real app this would come from your state management
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 129.99,
-      quantity: 1,
-      image: "/api/placeholder/200/200"
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: 249.99,
-      quantity: 1,
-      image: "/api/placeholder/200/200"
-    },
-    {
-      id: 3,
-      name: "Bluetooth Speaker",
-      price: 79.99,
-      quantity: 2,
-      image: "/api/placeholder/200/200"
+  const [cartItems, setCartItems] = useState([]);
+  const [order_id, setOrderId] = useState(null);
+  const [user_id, setUserId] = useState(null);
+
+  useEffect(() => {
+    async function getCartItems() {
+      setUserId(parseFloat(JSON.parse(sessionStorage.getItem("user_client")).userid));
+      if (!user_id) return;
+
+      const { data } = await axios.get("/api/order", {
+        params: {
+          userid: user_id,
+        }
+      })
+
+      setOrderId(data.orders[0].orderid);
+      if (!data || !data.success) return;
+      if (!data.orders) return;
+      if (!data.orders[0]) return;
+      setCartItems(prev => ([...prev, ...data.orders[0].items]));
     }
-  ]);
+
+    getCartItems();
+  }, [user_id]);
 
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity < 1) return;
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
+
+    const updated_items = cartItems.map((item) => {
+      if (item.productid === id) {
+        item.Quantity = newQuantity;
+      }
+
+      return item;
+    });
+
+    setCartItems(updated_items);
   };
 
   const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+    axios.delete("/api/order", {
+      params: {
+        userid: user_id,
+        product_id: id,
+        order_id: order_id
+      }
+    }).then(() => {
+      
+      setCartItems(cartItems.filter(item => item.productid !== id));
+    });
+
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.Price * item.Quantity), 0);
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
 
@@ -54,34 +73,34 @@ const ShoppingCart = () => {
       
       <div className="space-y-4">
         {cartItems.map(item => (
-          <Card key={item.id} className="overflow-hidden">
+          <Card key={item.productid} className="overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
                 <Image
                   src={item.image} 
-                  alt={item.name}
+                  alt={item.ProductName}
                   className="w-24 h-24 object-cover rounded-md"
                   height={100}
                   width={100}
                 />
                 
                 <div className="flex-grow">
-                  <h3 className="font-semibold text-lg">{item.name}</h3>
-                  <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                  <h3 className="font-semibold text-lg">{item.ProductName}</h3>
+                  <p className="text-gray-600">${item.Price.toFixed(2)}</p>
                   
                   <div className="flex items-center gap-2 mt-2">
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.productid, item.Quantity - 1)}
                     >
                       <Minus className="h-4 w-4" />
                     </Button>
-                    <span className="w-8 text-center">{item.quantity}</span>
+                    <span className="w-8 text-center">{item.Quantity}</span>
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.id, item.Quantity + 1)}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>
@@ -90,13 +109,13 @@ const ShoppingCart = () => {
                 
                 <div className="text-right">
                   <p className="font-semibold text-lg">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${(item.Price * item.Quantity).toFixed(2)}
                   </p>
                   <Button
                     variant="ghost"
                     size="icon"
                     className="text-red-500 hover:text-red-700"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => removeItem(item.productid)}
                   >
                     <Trash2 className="h-5 w-5" />
                   </Button>

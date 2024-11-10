@@ -18,9 +18,10 @@ export async function GET(request) {
         orders: user_orders,
     });
 
-}
+};
 
 export async function POST(request) {
+    const client = new PrismaClient();
 
     try {
         const { userid, product } = await request.json();
@@ -28,9 +29,8 @@ export async function POST(request) {
         if (!userid) throw "No User ID Provided";
         if (!product) throw "No Product Provided";
 
-        const client = new PrismaClient();
-
-        console.log("huh");
+        
+        product.Quantity = 1;
         
         const user_order = await client.order.findFirst({
             where: {
@@ -40,7 +40,6 @@ export async function POST(request) {
         });
 
         if (!user_order  || user_order.is_checkedout === true) {
-            console.log("item created!")
             await client.order.create({
                 data: {
                     userid: userid,
@@ -48,13 +47,11 @@ export async function POST(request) {
                 }
             })
         } else {
-            console.log("updating order");
             let updated_items = [...user_order.items];
 
             if (updated_items.length !== 0) {
                 updated_items.map(item => {
                     if (item.productid !== product.productid) {
-                        console.log("no matches; item addedd");
                         updated_items.push(product);
                     }
                 });
@@ -73,12 +70,11 @@ export async function POST(request) {
                         set: updated_items,
                     }
                 }
-            }).then((item) => console.log(item))
+            })
             .catch((e) =>  {
                 throw `Prisma Error; ${e}`
             })
 
-            console.log("updated order")
         }
 
         return NextResponse.json({
@@ -91,6 +87,90 @@ export async function POST(request) {
             success: false,
             message: e,
         })
+    } finally {
+        await client.$disconnect();
     }
 
+};
+
+export async function DELETE(request) {
+    const client = new PrismaClient();
+   
+    try {
+        const { searchParams } = new URL(request.url);
+        const user_id = Number(searchParams.get("userid"));
+        const product_id = Number(searchParams.get("product_id"));
+        const order_id = searchParams.get("order_id");
+       
+        if (!user_id || isNaN(user_id)) {
+            return NextResponse.json({
+                success: false,
+                message: "Invalid user ID"
+            }, { status: 400 });
+        }
+       
+        if (!product_id || isNaN(product_id)) {
+            return NextResponse.json({
+                success: false,
+                message: "Invalid product ID"
+            }, { status: 400 });
+        }
+       
+        if (!order_id) {
+            return NextResponse.json({
+                success: false,
+                message: "Order ID is required"
+            }, { status: 400 });
+        }
+
+        // Find the order
+        const order_db = await client.order.findUnique({
+            where: {
+                orderid: order_id
+            }
+        });
+
+        if (!order_db) {
+            return NextResponse.json({
+                success: false,
+                message: "Order not found"
+            }, { status: 404 });
+        }
+
+        // Verify the order belongs to the user
+        if (order_db.userid !== user_id) {
+            return NextResponse.json({
+                success: false,
+                message: "Order does not belong to this user"
+            }, { status: 403 });
+        }
+
+        const items_list = order_db.items.filter(item => item.productid !== product_id);
+
+        // Update the order
+        await client.order.update({
+            where: {
+                orderid: order_id
+            },
+            data: {
+                items: items_list
+            }
+        });
+
+        await client.$disconnect();
+       
+        return NextResponse.json({
+            success: true,
+            message: 'Item successfully removed from order'
+        }, { status: 200 });
+       
+    } catch (error) {
+        await client.$disconnect();
+       
+        return NextResponse.json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        }, { status: 500 });
+    }
 }

@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
 import axios from "axios";
 import { cookieStore as Cookies } from "@/tools/cookieClient";
+import Link from "next/link";
 
 const ShopPage = () => {
   const [cart, setCart] = useState([]);
@@ -15,13 +16,11 @@ const ShopPage = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
 
   async function AddExistinOrdersToDB(product) {
-    console.log("adding order")
     const { data } = await axios.post("/api/order", {
       userid: Number(Cookies.get("userid")),
       product: product,
     })
 
-    console.log(data);
     if (!data.success) return;
   }
 
@@ -41,23 +40,25 @@ const ShopPage = () => {
           userid: Number(Cookies.get("userid")),
         }
       });
-  
-      if (!data.orders || data.orders.items.length === 0) return;
-      console.log(data.orders.items, "orders");
 
-      data.orders.map(product => {
+      if (!data.orders) return;
+      if (!data.orders[0]) return;
+      const user_orders = data.orders[0];
+
+      user_orders.items.map(product => {
         setShowConfirmation(prev => ({
           ...prev,
-          [product.ProductName]: true,
+          [product.productid]: true,
         }))
+
+        setCart(prev => ([...prev, product]))
       })
   
     }
 
     GetProducts();
     GetExistingOrders();
-    console.log("items added", showConfirmation);
-  }, [showConfirmation])
+  }, [])
 
   const addToCart = (product) => {
 
@@ -79,22 +80,22 @@ const ShopPage = () => {
     return matchesSearch && matchesPrice;
   });
 
-  console.log(products);
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
+          <Link href="/cart" >
           <div className="relative">
             <ShoppingCart className="h-6 w-6 text-gray-600" />
-            {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#4CAF50] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cart.length}
-              </span>
-            )}
-          </div>
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#4CAF50] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
+            </div>
+          </Link>
         </div>
 
         {/* Search and Filter Section */}
@@ -167,7 +168,7 @@ const ShopPage = () => {
                       onClick={() => addToCart(product)}
                       className="bg-[#4CAF50] text-white px-4 py-2 rounded-lg hover:bg-[#45a049] transition-colors"
                     >
-                      {showConfirmation[product.ProductName] ? (
+                      {showConfirmation[product.productid] ? (
                         <div className="flex items-center">
                           <Check className="h-5 w-5 mr-1" /> Added
                         </div>
@@ -185,12 +186,14 @@ const ShopPage = () => {
         {/* Floating Cart Summary */}
         {cart.length > 0 && (
           <div className="fixed bottom-4 right-4">
-            <Alert className="bg-[#4CAF50] text-white">
-              <AlertDescription>
-                {cart.length} {cart.length === 1 ? 'item' : 'items'} in cart - Total: $
-                {cart.reduce((sum, item) => sum + item.Price, 0).toFixed(2)}
-              </AlertDescription>
-            </Alert>
+            <Link href="/cart" >
+              <Alert className="bg-[#4CAF50] text-white">
+                <AlertDescription>
+                  {cart.length} {cart.length === 1 ? 'item' : 'items'} in cart - Total: $
+                  {cart.reduce((sum, item) => sum + item.Price, 0).toFixed(2)}
+                </AlertDescription>
+              </Alert>
+            </Link>
           </div>
         )}
       </div>
