@@ -9,3 +9,6 @@ list.print();
 
 list.sort((a, b) => a > b);
 list.print();
+
+let searched_data = list.search(89);
+console.log(searched_data);

@@ -81,6 +81,26 @@ class LinkedList {
         } while (swapped);
     }
 
+    search(value) {
+        if (this.head.value === value) {
+            return this.head;
+        }
+
+        let current = this.head.next;
+        
+        while (current && current.value !== value) {
+            current = current.next;
+        }
+
+        if (current) {
+            return current;
+        } else {
+            console.log("Not Available in the List");
+            return null;
+        };
+
+    }
+
     insert_start(value) {
         let node = CreateNode(value);
         node.next = this.head;
