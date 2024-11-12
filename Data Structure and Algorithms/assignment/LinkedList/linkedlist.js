@@ -82,7 +82,17 @@ class LinkedList {
     }
 
     search(value) {
-        if (this.head.value === value) {
+
+        if (!this.head) {
+            console.log("Head not found");
+            return null;
+        }
+
+        if (typeof value === "object") {
+            if ()
+        }
+
+        if ( this.head.value === value) {
             return this.head;
         }
 
