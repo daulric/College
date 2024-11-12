@@ -6,4 +6,4 @@ export default async function RECEIPT({params}) {
     return (
         <PAGE orderid={orderid}/>
     )
-}
+};

@@ -1,15 +1,16 @@
 "use client"
 
-import React from 'react';
+import {useEffect, useState} from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download, Package, CreditCard, Calendar } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import dateUtils from '@/tools/dateUtils';
+import axios from "axios";
 
-const OrderReceipt = ({orderid}) => {
-  const orderData = {
-    orderId: `#${orderid}`,
+const OrderReceipt =  ({orderid}) => {
+  const [orderData, setOrderData] = useState({
+    orderId: `${orderid}`,
     date: dateUtils.getCustomFormat("DD/MM/YYYY"),
     items: [
       { id: 1, name: "Wireless Headphones", price: 129.99, quantity: 1 },
@@ -28,7 +29,22 @@ const OrderReceipt = ({orderid}) => {
       zip: "78701"
     },
     paymentMethod: "Visa ending in 4242"
-  };
+  })
+
+  useEffect(() => {
+    async function getOrderData() {
+      const { data } = await axios.get("/api/order", {
+        params: {
+          orderid: orderid
+        }
+      });
+
+      if (!data || data.success === false) return;
+      setOrderData(() => data.orders)
+    }
+
+    getOrderData();
+  }, [orderid]);
 
   const generatePDF = () => {
     // Initialize PDF document
@@ -46,10 +62,10 @@ const OrderReceipt = ({orderid}) => {
     // Add items table
     const tableColumn = ["Item", "Quantity", "Price", "Total"];
     const tableRows = orderData.items.map(item => [
-      item.name,
-      item.quantity,
-      `$${item.price.toFixed(2)}`,
-      `$${(item.price * item.quantity).toFixed(2)}`
+      item.ProductName,
+      item.Quantity,
+      `$${item.Price.toFixed(2)}`,
+      `$${(item.Price * item.Quantity).toFixed(2)}`
     ]);
     
     doc.autoTable({

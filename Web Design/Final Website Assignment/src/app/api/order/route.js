@@ -3,9 +3,24 @@ import { PrismaClient } from "@prisma/client";
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const user_id = Number(searchParams.get("userid"));
+    const orderid = searchParams.get("orderid");
     const is_active = searchParams.get("is_purchased") === "true" ? true : false;
 
     const client = new PrismaClient();
+
+    if (orderid) {
+        const order_data = await client.order.findUnique({
+            where: {
+                orderid: orderid,
+            }
+        });
+
+        return NextResponse.json({
+            success: true,
+            orders: order_data
+        })
+    }
+
     const user_orders = await client.order.findMany({
         where: {
             userid: user_id,
