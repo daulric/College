@@ -18,7 +18,7 @@ const OrderReceipt =  ({orderid}) => {
       { id: 3, name: "USB-C Cable", price: 12.99, quantity: 1 }
     ],
     subtotal: 192.96,
-    shipping: 8.99,
+    shipping: 4.99,
     tax: 19.30,
     total: 221.25,
     shippingAddress: {
@@ -40,11 +40,33 @@ const OrderReceipt =  ({orderid}) => {
       });
 
       if (!data || data.success === false) return;
-      setOrderData(() => data.orders)
+      const orders = data.orders;
+
+      // Subtotal Calculation
+      let subtotal = 0;
+      orders.items.map((item) => {
+        subtotal += item.Price;
+      });
+
+      let tax_percent = 8 // 8%
+      let tax = subtotal * (tax_percent / 100);
+
+      // Total Calculation
+      let total = subtotal + orderData.shipping + tax;
+
+      let temp_data = {
+        orderId: orderid,
+        items: orders.items,
+        subtotal: subtotal,
+        tax: tax,
+        total: total,
+      };
+
+      setOrderData(prev => ({...prev, ...temp_data}));
     }
 
     getOrderData();
-  }, [orderid]);
+  }, [orderData.shipping, orderid]);
 
   const generatePDF = () => {
     // Initialize PDF document
@@ -142,12 +164,12 @@ const OrderReceipt =  ({orderid}) => {
               <h3 className="font-semibold mb-4">Items Purchased</h3>
               <div className="space-y-4">
                 {orderData.items.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center">
+                  <div key={item.productid} className="flex justify-between items-center">
                     <div>
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                      <p className="font-medium">{item.ProductName}</p>
+                      <p className="text-sm text-gray-600">Quantity: {item.Quantity}</p>
                     </div>
-                    <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium">${(item.Price * item.Quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>

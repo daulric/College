@@ -35,6 +35,11 @@ const ShoppingCart = () => {
     getCartItems();
   }, [user_id]);
 
+  async function redirectToReceipt() {
+    if (!order_id) return;
+    return window.location.href = `/receipt/${order_id}`;
+  }
+
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity < 1) return;
 
@@ -142,7 +147,7 @@ const ShoppingCart = () => {
           </div>
         </div>
         
-        <Button className="w-full mt-4 bg-[#4CAF50] hover:bg-[#4CAF51] text-white">
+        <Button onClick={redirectToReceipt} className="w-full mt-4 bg-[#4CAF50] hover:bg-[#4CAF51] text-white">
           Proceed to Checkout
         </Button>
       </div>

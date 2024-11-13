@@ -62,14 +62,19 @@ export async function POST(request) {
                 }
             })
         } else {
-            let updated_items = [...user_order.items];
+
+            let updated_items = [];
+            user_order.items.forEach((item) => {
+                if (!updated_items.some(item2 => item2.productid === item.productid)) {
+                    updated_items.push(item);
+                }
+            });
 
             if (updated_items.length !== 0) {
-                updated_items.map(item => {
-                    if (item.productid !== product.productid) {
-                        updated_items.push(product);
-                    }
-                });
+                let exists_product = updated_items.some(item => item.productid === product.productid);
+                if (!exists_product) {
+                    updated_items.push(product);
+                }
             } else {
                 updated_items.push(product);
             }

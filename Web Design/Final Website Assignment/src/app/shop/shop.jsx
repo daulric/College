@@ -60,16 +60,17 @@ const ShopPage = () => {
     GetExistingOrders();
   }, [])
 
-  const addToCart = (product) => {
+  const addToCart = async (product) => {
 
     if (showConfirmation[product.productid] === true) return;
+    if (cart.find(item => item.productid === product.productid)) return;
+    await AddExistinOrdersToDB(product);  
 
     setShowConfirmation(prev => ({
       ...prev,
       [product.productid]: true
     }));
-
-    AddExistinOrdersToDB(product);    
+  
     setCart(prev => ([...prev, product]))
   };
 
@@ -165,7 +166,11 @@ const ShopPage = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-gray-900">${product.Price}</span>
                     <button
-                      onClick={() => addToCart(product)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addToCart(product);
+                      }}
+                      disabled={showConfirmation[product.productid] ? showConfirmation[product.productid] : false}
                       className="bg-[#4CAF50] text-white px-4 py-2 rounded-lg hover:bg-[#45a049] transition-colors"
                     >
                       {showConfirmation[product.productid] ? (
