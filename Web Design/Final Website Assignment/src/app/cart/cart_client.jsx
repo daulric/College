@@ -14,6 +14,8 @@ const ShoppingCart = () => {
   const [order_id, setOrderId] = useState(null);
   const [user_id, setUserId] = useState(null);
 
+  let quantity_update_timeout;
+
   useEffect(() => {
     async function getCartItems() {
       setUserId(parseFloat(JSON.parse(sessionStorage.getItem("user_client")).userid));
@@ -40,11 +42,23 @@ const ShoppingCart = () => {
     return window.location.href = `/receipt/${order_id}`;
   }
 
-  const updateQuantity = (id, newQuantity) => {
+  async function UpdateOrder() {
+    console.log("updating order");
+    await axios.put('/api/order', {
+      orderid: order_id,
+      userid: user_id,
+      order: cartItems,
+    })
+  }
+
+  const updateQuantity = async (id, newQuantity) => {
     if (newQuantity < 1) return;
 
     const updated_items = cartItems.map((item) => {
+
       if (item.productid === id) {
+        clearTimeout(quantity_update_timeout);
+        quantity_update_timeout = setTimeout(UpdateOrder, 2000);
         item.Quantity = newQuantity;
       }
 
@@ -82,7 +96,7 @@ const ShoppingCart = () => {
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
                 <Image
-                  src={item.image} 
+                  src={`/shop/pic-${item.productid}.webp`} 
                   alt={item.ProductName}
                   className="w-24 h-24 object-cover rounded-md"
                   height={100}
@@ -105,7 +119,7 @@ const ShoppingCart = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => updateQuantity(item.id, item.Quantity + 1)}
+                      onClick={() => updateQuantity(item.productid, item.Quantity + 1)}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>

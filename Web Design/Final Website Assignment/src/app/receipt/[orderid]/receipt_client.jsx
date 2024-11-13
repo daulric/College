@@ -12,11 +12,7 @@ const OrderReceipt =  ({orderid}) => {
   const [orderData, setOrderData] = useState({
     orderId: `${orderid}`,
     date: dateUtils.getCustomFormat("DD/MM/YYYY"),
-    items: [
-      { id: 1, name: "Wireless Headphones", price: 129.99, quantity: 1 },
-      { id: 2, name: "Phone Case", price: 24.99, quantity: 2 },
-      { id: 3, name: "USB-C Cable", price: 12.99, quantity: 1 }
-    ],
+    items: [],
     subtotal: 192.96,
     shipping: 4.99,
     tax: 19.30,
@@ -44,8 +40,14 @@ const OrderReceipt =  ({orderid}) => {
 
       // Subtotal Calculation
       let subtotal = 0;
-      orders.items.map((item) => {
+      let temp_data_items = orders.items.map((item) => {
+        let temp_sub_price = item.Price;
+        item.Sub_Price = temp_sub_price;
+
+        item.Price = item.Sub_Price * item.Quantity;
         subtotal += item.Price;
+
+        return item;
       });
 
       let tax_percent = 8 // 8%
@@ -56,7 +58,7 @@ const OrderReceipt =  ({orderid}) => {
 
       let temp_data = {
         orderId: orderid,
-        items: orders.items,
+        items: temp_data_items,
         subtotal: subtotal,
         tax: tax,
         total: total,
@@ -86,8 +88,8 @@ const OrderReceipt =  ({orderid}) => {
     const tableRows = orderData.items.map(item => [
       item.ProductName,
       item.Quantity,
-      `$${item.Price.toFixed(2)}`,
-      `$${(item.Price * item.Quantity).toFixed(2)}`
+      `$${item.Sub_Price.toFixed(2)}`,
+      `$${(item.Price).toFixed(2)}`
     ]);
     
     doc.autoTable({
@@ -145,7 +147,7 @@ const OrderReceipt =  ({orderid}) => {
             {/* Order Summary */}
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-lg font-semibold">Order {orderData.orderId}</p>
+                <p className="text-lg font-semibold">Order: {`#${orderData.orderId.slice(0, 8)}...`}</p>
                 <div className="flex items-center gap-2 text-gray-600 mt-1">
                   <Calendar size={16} />
                   <span>{orderData.date}</span>

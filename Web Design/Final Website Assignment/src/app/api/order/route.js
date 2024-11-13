@@ -113,6 +113,44 @@ export async function POST(request) {
 
 };
 
+// Updates the state of the Order eg. Quantity;
+export async function PUT(request) {
+    const client = new PrismaClient();
+    try {
+        const { order: updated_order, orderid, userid } = await request.json();
+
+        if (!updated_order) throw "There is no updated order";
+        if (!orderid || !userid) throw "Missing Requirements";
+
+        await client.$transaction(async () => {
+            await client.order.update({
+              data: {
+                items: {
+                    set: updated_order,
+                },
+              },
+              where: {
+                userid: userid,
+                orderid: orderid,
+              },
+            });
+          });
+
+        return NextResponse.json({
+            success: true,
+            message: "Order updated successfully",
+        })
+        
+    } catch(e) {
+        return NextResponse.json({
+            success: false,
+            message: e,
+        })
+    } finally {
+        await client.$disconnect();
+    }
+}
+
 export async function DELETE(request) {
     const client = new PrismaClient();
    
