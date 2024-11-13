@@ -44,7 +44,6 @@ export async function POST(request) {
         if (!userid) throw "No User ID Provided";
         if (!product) throw "No Product Provided";
 
-        
         product.Quantity = 1;
         
         const user_order = await client.order.findFirst({
@@ -117,29 +116,41 @@ export async function POST(request) {
 export async function PUT(request) {
     const client = new PrismaClient();
     try {
-        const { order: updated_order, orderid, userid } = await request.json();
+        const { order: updated_order, orderid, userid, checked_out } = await request.json();
 
-        if (!updated_order) throw "There is no updated order";
         if (!orderid || !userid) throw "Missing Requirements";
 
         await client.$transaction(async () => {
-            await client.order.update({
-              data: {
-                items: {
-                    set: updated_order,
-                },
-              },
-              where: {
-                userid: userid,
-                orderid: orderid,
-              },
-            });
+            if (updated_order) {
+                await client.order.update({
+                    data: {
+                        items: {
+                            set: updated_order,
+                        },
+                    },
+                    where: {
+                        userid: userid,
+                        orderid: orderid,
+                    },
+                });
+            } else if (checked_out === true) {
+                await client.order.update({
+                    where: {
+                        userid: userid,
+                        orderid: orderid,
+                    },
+
+                    data: {
+                        is_checkedout: true,
+                    }
+                })
+            };
           });
 
         return NextResponse.json({
             success: true,
             message: "Order updated successfully",
-        })
+        });
         
     } catch(e) {
         return NextResponse.json({

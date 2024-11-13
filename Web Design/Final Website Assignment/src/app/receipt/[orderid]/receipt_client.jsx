@@ -7,8 +7,10 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import dateUtils from '@/tools/dateUtils';
 import axios from "axios";
+import { cookieStore } from '@/tools/cookieClient';
 
 const OrderReceipt =  ({orderid}) => {
+
   const [orderData, setOrderData] = useState({
     orderId: `${orderid}`,
     date: dateUtils.getCustomFormat("DD/MM/YYYY"),
@@ -24,7 +26,7 @@ const OrderReceipt =  ({orderid}) => {
       state: "TX",
       zip: "78701"
     },
-    paymentMethod: "Visa ending in 4242"
+    paymentMethod: "Visa ending in 1234",
   })
 
   useEffect(() => {
@@ -56,12 +58,23 @@ const OrderReceipt =  ({orderid}) => {
       // Total Calculation
       let total = subtotal + orderData.shipping + tax;
 
+      // Get User Account Info;
+      const user_account = JSON.parse(window.sessionStorage.getItem("user_client"));
+
       let temp_data = {
         orderId: orderid,
         items: temp_data_items,
         subtotal: subtotal,
         tax: tax,
         total: total,
+        shippingAddress: {
+          name: user_account.username,
+          email: user_account.email,
+          street: "Lucas Street",
+          city: "St. George's",
+          state: "St. George",
+          zip: "12345"
+        }
       };
 
       setOrderData(prev => ({...prev, ...temp_data}));
@@ -70,8 +83,7 @@ const OrderReceipt =  ({orderid}) => {
     getOrderData();
   }, [orderData.shipping, orderid]);
 
-  const generatePDF = () => {
-    // Initialize PDF document
+  const doc = () => {
     const doc = new jsPDF();
     
     // Add company logo/header
@@ -97,7 +109,7 @@ const OrderReceipt =  ({orderid}) => {
       head: [tableColumn],
       body: tableRows,
       theme: 'striped',
-      headStyles: { fillColor: [66, 139, 202] }
+      headStyles: { fillColor: [76, 175, 80] }
     });
 
     // Add cost breakdown
@@ -112,18 +124,29 @@ const OrderReceipt =  ({orderid}) => {
     doc.setFontSize(12);
     doc.text("Shipping Address:", 20, finalY);
     doc.text(orderData.shippingAddress.name, 20, finalY + 10);
-    doc.text(orderData.shippingAddress.street, 20, finalY + 20);
-    doc.text(`${orderData.shippingAddress.city}, ${orderData.shippingAddress.state} ${orderData.shippingAddress.zip}`, 20, finalY + 30);
+    doc.text(orderData.shippingAddress.email, 20, finalY + 20);
+    doc.text(orderData.shippingAddress.street, 20, finalY + 30);
+    doc.text(`${orderData.shippingAddress.city}, ${orderData.shippingAddress.state} ${orderData.shippingAddress.zip}`, 20, finalY + 40);
     
     // Add payment method
-    doc.text(`Payment Method: ${orderData.paymentMethod}`, 20, finalY + 45);
+    doc.text(`Payment Method: ${orderData.paymentMethod}`, 20, finalY + 55);
     
     // Add footer
     doc.setFontSize(10);
     doc.text("Thank you for your purchase!", 105, 280, { align: 'center' });
-    
+
+    return doc;
+  }
+
+  const generatePDF = () => {
+    // Initialize PDF document
+    const docPDF = doc();
     // Save the PDF
-    doc.save(`receipt-${orderData.orderId}.pdf`);
+    docPDF.save(`receipt-${orderData.orderId}.pdf`);
+  };
+
+  if (!cookieStore.get("userid")) {
+    return window.location.href = "/login";
   };
 
   return (
@@ -205,6 +228,7 @@ const OrderReceipt =  ({orderid}) => {
               <div className="border rounded-lg p-4">
                 <h3 className="font-semibold mb-4">Shipping Address</h3>
                 <p>{orderData.shippingAddress.name}</p>
+                <p>{orderData.shippingAddress.email}</p>
                 <p>{orderData.shippingAddress.street}</p>
                 <p>{orderData.shippingAddress.city}, {orderData.shippingAddress.state} {orderData.shippingAddress.zip}</p>
               </div>

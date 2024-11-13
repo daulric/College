@@ -81,6 +81,10 @@ const ShopPage = () => {
     return matchesSearch && matchesPrice;
   });
 
+  if (!Cookies.get("userid")) {
+    return window.location.href = "/login";
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
