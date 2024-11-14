@@ -88,10 +88,6 @@ class LinkedList {
             return null;
         }
 
-        if (typeof value === "object") {
-            if ()
-        }
-
         if ( this.head.value === value) {
             return this.head;
         }
@@ -114,7 +110,7 @@ class LinkedList {
     insert_start(value) {
         let node = CreateNode(value);
         node.next = this.head;
-        self.head = node;
+        this.head = node;
     }
 
 }

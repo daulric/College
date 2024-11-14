@@ -5,10 +5,14 @@ list.add(89);
 list.add(8);
 list.add(837);
 list.add(2)
-list.print();
+//list.print();
 
+list.insert_start(4);
+list.print();
 list.sort((a, b) => a > b);
 list.print();
+list.remove(8);
+list.print();
 
-let searched_data = list.search(89);
-console.log(searched_data);
+const searched_node = list.search(2);
+console.log(searched_node);
