@@ -7,7 +7,7 @@ local function getSequence(arr)
         local increment = i+1;
         
         if increment > length then
-            break;
+            return;
         end
 
         local temp_seq = arr[increment] - arr[i];
@@ -16,7 +16,7 @@ local function getSequence(arr)
             seq = temp_seq;
         elseif seq ~= temp_seq then
             print("Not a Sequence");
-            break;
+            return
         end
     end
 
@@ -24,6 +24,12 @@ local function getSequence(arr)
 end
 
 local function getPositionSequence(position, n, arr)
+    -- The position parameter is to figure out what is the index value for the given position.
+
+    if (n == nil and arr == nil) or position == nil then
+        return;
+    end
+
     for i = #arr, position do
         local temp = arr[i] + n;
         table.insert(arr, temp);
@@ -32,6 +38,7 @@ local function getPositionSequence(position, n, arr)
     return arr[position], arr
 end
 
-local seq, array = getSequence({-2, 0, 2})
-local positionPoint = getPositionSequence(20, seq, array)
-print(positionPoint);
+return {
+    GetSequence = getSequence,
+    GetPositionSequence = getPositionSequence,
+}
