@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 40 --turbopack",
-    "dev:db": "npx prisma migrate dev --name init && npm run dev",
+    "dev": "npx prisma migrate dev --name init && next dev -p 40",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 40",
     "lint": "next lint",
     "deploy": "npx prisma migrate deploy && npm run build && npm run start",
     "shadcn": "npx shadcn@latest"

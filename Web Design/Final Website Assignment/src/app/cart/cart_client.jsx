@@ -5,7 +5,7 @@ import { Trash2, Plus, Minus } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import axios from "axios";
-import {cookieStore as Cookies} from "@/tools/cookieClient";
+import { redirect } from 'next/navigation';
 
 import Image from "next/image";
 
@@ -42,13 +42,22 @@ const ShoppingCart = () => {
     e.preventDefault();
 
     if (!order_id) return;
+
     await axios.put("/api/order", {
       userid: user_id,
       orderid: order_id,
       checked_out: true,
-    }).then(() => {
-      return window.location.href = `/receipt/${order_id}`;
+    }).then(async () => {
+      await axios.post("/api/receipt", {
+        orderid: order_id,
+      }).then((receipt) => {
+        console.log(receipt);
+        if (!receipt.data.success) return;
+        if (!receipt.data.data) return;
+        redirect(`/receipt/${receipt.data.data.receiptid}`);
+      });
     });
+
   }
 
   async function UpdateOrder() {
@@ -94,10 +103,6 @@ const ShoppingCart = () => {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.Price * item.Quantity), 0);
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
-
-  if (!Cookies.get("userid")) {
-    return window.location.href = "/login";
-  }
 
   return (
     <div className="max-w-4xl mx-auto p-4">

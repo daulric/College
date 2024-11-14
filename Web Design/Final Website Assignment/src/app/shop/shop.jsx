@@ -49,7 +49,7 @@ const ShopPage = () => {
         setShowConfirmation(prev => ({
           ...prev,
           [product.productid]: true,
-        }))
+        }));
 
         setCart(prev => ([...prev, product]))
       })
@@ -80,10 +80,6 @@ const ShopPage = () => {
     const matchesPrice = product.Price >= priceRange.min && product.Price <= priceRange.max;
     return matchesSearch && matchesPrice;
   });
-
-  if (!Cookies.get("userid")) {
-    return window.location.href = "/login";
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

@@ -1,24 +1,24 @@
 "use client"
 
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, Package, CreditCard, Calendar } from 'lucide-react';
+import { Download, Package, Calendar } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import dateUtils from '@/tools/dateUtils';
 import axios from "axios";
 import { cookieStore } from '@/tools/cookieClient';
+import { redirect } from 'next/navigation';
 
-const OrderReceipt =  ({orderid}) => {
-
+const OrderReceipt =  ({receiptid}) => {
   const [orderData, setOrderData] = useState({
-    orderId: `${orderid}`,
+    orderId: "",
     date: dateUtils.getCustomFormat("DD/MM/YYYY"),
     items: [],
-    subtotal: 192.96,
+    subtotal: 0,
     shipping: 4.99,
-    tax: 19.30,
-    total: 221.25,
+    tax: 0,
+    total: 0,
     shippingAddress: {
       name: "John Doe",
       street: "123 Main St",
@@ -27,63 +27,14 @@ const OrderReceipt =  ({orderid}) => {
       zip: "78701"
     },
     paymentMethod: "Visa ending in 1234",
-  })
+  });
 
-  useEffect(() => {
-    async function getOrderData() {
-      const { data } = await axios.get("/api/order", {
-        params: {
-          orderid: orderid
-        }
-      });
-
-      if (!data || data.success === false) return;
-      const orders = data.orders;
-
-      // Subtotal Calculation
-      let subtotal = 0;
-      let temp_data_items = orders.items.map((item) => {
-        let temp_sub_price = item.Price;
-        item.Sub_Price = temp_sub_price;
-
-        item.Price = item.Sub_Price * item.Quantity;
-        subtotal += item.Price;
-
-        return item;
-      });
-
-      let tax_percent = 8 // 8%
-      let tax = subtotal * (tax_percent / 100);
-
-      // Total Calculation
-      let total = subtotal + orderData.shipping + tax;
-
-      // Get User Account Info;
-      const user_account = JSON.parse(window.sessionStorage.getItem("user_client"));
-
-      let temp_data = {
-        orderId: orderid,
-        items: temp_data_items,
-        subtotal: subtotal,
-        tax: tax,
-        total: total,
-        shippingAddress: {
-          name: user_account.username,
-          email: user_account.email,
-          street: "Lucas Street",
-          city: "St. George's",
-          state: "St. George",
-          zip: "12345"
-        }
-      };
-
-      setOrderData(prev => ({...prev, ...temp_data}));
+  const doc_PDF = useCallback(() => {
+    if (!cookieStore.get("userid")) {
+      redirect("/login");
+      return;
     }
 
-    getOrderData();
-  }, [orderData.shipping, orderid]);
-
-  const doc = () => {
     const doc = new jsPDF();
     
     // Add company logo/header
@@ -136,17 +87,90 @@ const OrderReceipt =  ({orderid}) => {
     doc.text("Thank you for your purchase!", 105, 280, { align: 'center' });
 
     return doc;
-  }
+  }, [orderData]);
+
+  const [loading, setLoading] = useState(false);
+
+  const getOrderData = useCallback(async (receiptid) => {
+    if (loading) return; // Prevent further calls if already loading
+    setLoading(true); // Set loading state
+
+    try {
+      const { data: receipt_data } = await axios.get("/api/receipt", {
+        params: { receipt_id: receiptid }
+      });
+
+      if (!receipt_data || receipt_data.success === false) {
+        console.error("Failed to fetch receipt data");
+        return;
+      }
+
+      const receipt_info = receipt_data.data;
+      const user = receipt_info.user;
+      const order_info = receipt_info.order_info;
+
+      if (!order_info || !order_info.items) {
+        console.error("Order info or items missing");
+        return;
+      }
+
+      const orders = order_info.items;
+
+      // Subtotal Calculation
+      let subtotal = 0;
+
+      let temp_data_items = orders.map((item) => {
+        let temp_sub_price = item.Price;
+        item.Sub_Price = temp_sub_price;
+
+        item.Price = item.Sub_Price * item.Quantity;
+        subtotal += item.Price;
+
+        return item;
+      });
+
+      const tax_percent = 8; // 8%
+      let tax = subtotal * (tax_percent / 100);
+
+      // Total Calculation
+      let total = subtotal + orderData.shipping + tax;
+
+      // Prepare the order data
+      let temp_data = {
+        orderId: order_info.orderid,
+        items: temp_data_items,
+        subtotal: subtotal,
+        tax: tax,
+        total: total,
+        shippingAddress: {
+          name: user.username,
+          email: user.email,
+          street: "Lucas Street",
+          city: "St. George's",
+          state: "St. George",
+          zip: "12345",
+        },
+        paymentMethod: order_info.paymentMethod,
+      };
+
+      setOrderData(prev => ({ ...prev, ...temp_data }));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching or processing order data: ", error);
+    }
+
+  }, [orderData, loading]);
+
+  useEffect(() => {
+    if (receiptid) {
+      getOrderData(receiptid);
+    }
+  }, [receiptid, getOrderData]);
+  
 
   const generatePDF = () => {
-    // Initialize PDF document
-    const docPDF = doc();
-    // Save the PDF
+    const docPDF = doc_PDF();
     docPDF.save(`receipt-${orderData.orderId}.pdf`);
-  };
-
-  if (!cookieStore.get("userid")) {
-    return window.location.href = "/login";
   };
 
   return (
@@ -164,7 +188,7 @@ const OrderReceipt =  ({orderid}) => {
             </button>
           </div>
         </CardHeader>
-        
+
         <CardContent className="pt-6">
           <div className="grid gap-6">
             {/* Order Summary */}
@@ -194,51 +218,36 @@ const OrderReceipt =  ({orderid}) => {
                       <p className="font-medium">{item.ProductName}</p>
                       <p className="text-sm text-gray-600">Quantity: {item.Quantity}</p>
                     </div>
-                    <p className="font-medium">${(item.Price * item.Quantity).toFixed(2)}</p>
+                    <p className="font-medium">${(item.Price).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Shipping Details */}
+            <div className="border rounded-lg p-4 mt-6">
+              <h3 className="font-semibold mb-4">Shipping Address</h3>
+              <p>{orderData.shippingAddress.name}</p>
+              <p>{orderData.shippingAddress.street}</p>
+              <p>{orderData.shippingAddress.city}, {orderData.shippingAddress.state} {orderData.shippingAddress.zip}</p>
+              <p>{orderData.shippingAddress.email}</p>
+            </div>
+
             {/* Cost Breakdown */}
-            <div className="border rounded-lg p-4">
-              <h3 className="font-semibold mb-4">Cost Breakdown</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>${orderData.subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span>${orderData.shipping.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span>${orderData.tax.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between font-semibold text-lg pt-2 border-t">
-                  <span>Total</span>
-                  <span>${orderData.total.toFixed(2)}</span>
-                </div>
+            <div className="flex justify-between mt-6">
+              <div className="text-left">
+                <p>Subtotal: ${orderData.subtotal.toFixed(2)}</p>
+                <p>Shipping: ${orderData.shipping.toFixed(2)}</p>
+                <p>Tax: ${orderData.tax.toFixed(2)}</p>
+              </div>
+              <div className="text-right font-semibold">
+                <p>Total: ${orderData.total.toFixed(2)}</p>
               </div>
             </div>
 
-            {/* Shipping and Payment */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-4">Shipping Address</h3>
-                <p>{orderData.shippingAddress.name}</p>
-                <p>{orderData.shippingAddress.email}</p>
-                <p>{orderData.shippingAddress.street}</p>
-                <p>{orderData.shippingAddress.city}, {orderData.shippingAddress.state} {orderData.shippingAddress.zip}</p>
-              </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-4">Payment Method</h3>
-                <div className="flex items-center gap-2">
-                  <CreditCard size={20} />
-                  <span>{orderData.paymentMethod}</span>
-                </div>
-              </div>
+            {/* Payment Method */}
+            <div className="flex justify-between items-center mt-6">
+              <p>Payment Method: {orderData.paymentMethod}</p>
             </div>
           </div>
         </CardContent>

@@ -5,9 +5,11 @@ export const metadata = {
     description: "Receipt for the user",
 }
 export default async function RECEIPT({params}) {
-    const { orderid } = await params;
+    const { receiptid } = await params;
 
     return (
-        <PAGE orderid={orderid}/>
+        <>
+        <PAGE receiptid={receiptid}/>
+        </>
     )
 };
