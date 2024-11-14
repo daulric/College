@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import axios from "axios";
 import { redirect } from 'next/navigation';
+import { cookieStore } from '@/tools/cookieClient';
 
 import Image from "next/image";
 
@@ -18,6 +19,10 @@ const ShoppingCart = () => {
   let quantity_update_timeout;
 
   useEffect(() => {
+    if (!cookieStore.get("userid")) {
+      return window.location.href = "/login";
+    }
+
     async function getCartItems() {
       setUserId(parseFloat(JSON.parse(sessionStorage.getItem("user_client")).userid));
       if (!user_id) return;

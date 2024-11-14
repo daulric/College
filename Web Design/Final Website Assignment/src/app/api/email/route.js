@@ -1,20 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createTransport } from "nodemailer";
 
-
+const transporter = createTransport({
+    service: "yahoo",
+    auth: {
+        user: process.env.ACC_EMAIL,
+        pass: process.env.ACC_PASS,
+    },
+    tls: {
+        rejectUnauthorized: true
+    }
+});
 
 async function sendEmail(email, info) {
-
-    const transporter = createTransport({
-        host: process.env.SMTP_URL,
-        port: parseInt(process.env.SMTP_PORT),
-        secure: true, // Use SSL for Yahoo's SMTP on port 465
-        auth: {
-            user: process.env.ACC_EMAIL,
-            pass: process.env.ACC_PASS,
-        },
-    });
-
+    console.log("incoming email");
     try {
         const result = await transporter.sendMail({
             from: `"UA Store" <${process.env.ACC_EMAIL}>`,
@@ -27,8 +26,6 @@ async function sendEmail(email, info) {
     } catch (error) {
         console.error("Send Email Error:", error);
         throw new Error("Failed to send email");
-    } finally {
-        await transporter.close();
     }
 }
 
@@ -44,7 +41,8 @@ export async function POST(req) {
             );
         }
 
-        return NextResponse.json({ success: true, result });
+        console.log("Email Sent Successfully");
+        return NextResponse.json({ success: true, message: "Email Sent" });
     } catch (error) {
         console.error('Email error:', error);
         return NextResponse.json(

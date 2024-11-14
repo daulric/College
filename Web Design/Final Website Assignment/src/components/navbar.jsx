@@ -17,7 +17,8 @@ import { cookieStore as Cookies } from "@/tools/cookieClient";
 function CreateLink({ title, link = "#", isMobile = false }) {
   return (
     <Link
-      href={link}
+      href="#"
+      onClick={() => window.location.href = link}
       className={`text-[#333] hover:bg-[#4CAF50] hover:text-[#ffffff] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
         isMobile ? 'block' : ''
       }`}

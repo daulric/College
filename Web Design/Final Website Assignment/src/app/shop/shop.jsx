@@ -7,13 +7,14 @@ import Image from 'next/image';
 import axios from "axios";
 import { cookieStore as Cookies } from "@/tools/cookieClient";
 import Link from "next/link";
+import { cookieStore } from '@/tools/cookieClient';
 
 const ShopPage = () => {
   const [cart, setCart] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState({});
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 10 });
 
   async function AddExistinOrdersToDB(product) {
     const { data } = await axios.post("/api/order", {
@@ -25,6 +26,11 @@ const ShopPage = () => {
   }
 
   useEffect(() => {
+    if (!cookieStore.get("userid")) {
+      return window.location.href = "/login";
+    }
+
+
     async function GetProducts() {
       const {data} = await axios.get("/api/product");
 
@@ -135,7 +141,7 @@ const ShopPage = () => {
               <input
                 type="range"
                 min="0"
-                max="300"
+                max="10"
                 value={priceRange.max}
                 onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
                 className="w-full"

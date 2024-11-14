@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Send, Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import Link from "next/link"
+import axios from "axios";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ const ContactPage = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const socialLinks = [
     { Icon: Instagram, url: 'https://instagram.com/ulricaird' }
@@ -29,16 +32,37 @@ const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
-    setTimeout(() => setSubmitted(false), 3000);
+    setIsSending(true);
+
+    axios.post("/api/email", {
+      info: {
+        title: `Email from ${formData.name} <${formData.email}>`,
+        text: `Subject: ${formData.subject}\n${formData.message}`,
+      }
+    }).then(() => {
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+      setIsSending(false);
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 5000);
+    }) ;
+
+    
   };
+
+  useEffect(() => {
+    let user_client = sessionStorage.getItem("user_client");
+    if (!user_client) return;
+
+    user_client = JSON.parse(user_client);
+    setFormData(prev => ({...prev, name: user_client.username, email: user_client.email}));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
@@ -109,7 +133,7 @@ const ContactPage = () => {
                   <p className="font-medium text-gray-800 mb-4">Follow Us</p>
                   <div className="flex space-x-4">
                     {socialLinks.map(({ Icon, url }, index) => (
-                      <a
+                      <Link
                         key={index}
                         href={url}
                         target="_blank"
@@ -117,7 +141,7 @@ const ContactPage = () => {
                         className="p-2 bg-green-100 rounded-full hover:bg-[#4CAF50] hover:text-white transition-colors"
                       >
                         <Icon className="h-5 w-5" />
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -201,9 +225,10 @@ const ContactPage = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-[#4CAF50] hover:bg-[#45a049] text-white py-3 h-auto text-base"
+                    disabled={isSending}
                   >
                     <Send className="h-5 w-5 mr-2" />
-                    Send Message
+                    {isSending ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
 
