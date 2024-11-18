@@ -1,4 +1,4 @@
-const LinkedList = require("./linkedlist")
+const LinkedList = require("./linkedlist");
 
 const list = new LinkedList();
 list.add(89);

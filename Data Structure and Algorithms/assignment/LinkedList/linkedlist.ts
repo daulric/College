@@ -169,26 +169,4 @@ class LinkedList<T> {
 
 }
 
-const list = new LinkedList<number>();
-list.push(10)
-console.log("Size:", list.size)
-list.push(78);
-console.log("Size:", list.size)
-list.push(80);
-console.log("Size:", list.size)
-list.push(78);
-console.log("Size:", list.size)
-list.print();
-
-list.sort((a, b) => a > b);
-list.print();
-
-const node = list.search(80);
-console.log(node);
-
-list.insert_start(8);
-console.log("Size:", list.size)
-list.print();
-list.pop();
-console.log("Size:", list.size)
-list.print();
+export default LinkedList;
