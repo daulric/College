@@ -9,7 +9,7 @@ list.add(2)
 
 list.insert_start(4);
 list.print();
-list.sort((a, b) => a > b);
+list.sort((a, b) => a >= b);
 list.print();
 list.remove(8);
 list.print();
