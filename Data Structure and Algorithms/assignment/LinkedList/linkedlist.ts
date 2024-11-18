@@ -15,15 +15,18 @@ function CreateNode<T>(value: T): ListNode<T> {
 
 class LinkedList<T> {
     head: ListNode<T> | null;
+    size: number;
 
     constructor() {
         this.head = null;
+        this.size = 0;
     }
 
-    add(value: T) {
+    push(value: T) {
         const node = CreateNode(value);
         if (!this.head) {
             this.head = node;
+            this.size++;
             return;
         }
 
@@ -34,6 +37,7 @@ class LinkedList<T> {
         }
 
         current.next = node;
+        this.size++;
     }
 
     remove(value: T) : void {
@@ -42,6 +46,7 @@ class LinkedList<T> {
 
         if (this.head.value === value) {
             this.head = this.head.next;
+            this.size--;
             return;
         }
 
@@ -50,6 +55,7 @@ class LinkedList<T> {
         while (current && current.next) {
             if (current.next.value === value) {
                 current.next = current.next.next;
+                this.size--;
                 return;
             }
 
@@ -111,6 +117,7 @@ class LinkedList<T> {
 
         node.next = this.head;
         this.head = node;
+        this.size++;
     }
 
     print() {
@@ -128,13 +135,49 @@ class LinkedList<T> {
 
         console.log(str, "\n");
     }
+
+    // This is a stack implementation within the linked list
+    isEmpty() : boolean {
+        return !this.head && this.size === 0;
+    }
+
+    pop(): ListNode<T> | null {
+        if (this.isEmpty()) return null;
+
+        if (this.head && !this.head.next) {
+            let current_node = this.head;
+            this.head = null;
+            this.size--;
+            return current_node;
+        }
+
+        let current = this.head;
+
+        while (current !== null && current.next && current.next.next) {
+            current = current.next;
+        }
+
+        if (current) {
+            const popped_node = current.next;
+            current.next = null;
+            this.size--;
+            return popped_node;
+        }
+
+        return null;
+    }
+
 }
 
 const list = new LinkedList<number>();
-list.add(10)
-list.add(78);
-list.add(80);
-list.add(78);
+list.push(10)
+console.log("Size:", list.size)
+list.push(78);
+console.log("Size:", list.size)
+list.push(80);
+console.log("Size:", list.size)
+list.push(78);
+console.log("Size:", list.size)
 list.print();
 
 list.sort((a, b) => a > b);
@@ -144,4 +187,8 @@ const node = list.search(80);
 console.log(node);
 
 list.insert_start(8);
+console.log("Size:", list.size)
+list.print();
+list.pop();
+console.log("Size:", list.size)
 list.print();
