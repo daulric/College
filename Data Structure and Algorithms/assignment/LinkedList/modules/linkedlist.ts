@@ -132,23 +132,23 @@ class LinkedList<T> {
 
     }
 
-    search(value: T): ListNode<T> | null {
-        if (!this.#head) return null;
+    search(value: T): [boolean, ListNode<T> | null ] {
+        if (!this.#head) return [false, null] ;
 
         if (this.#head.value === value) {
-            return this.#head;
+            return [true, this.#head];
         }
 
         let current: ListNode<T> | null = this.#head;
 
         while (current !== null) {
             if (current.value === value) {
-                return current;
+                return [true, current];
             }
             current = current.next;
         }
 
-        return null;
+        return [false, null];
     }
 
     insert_start(value: T) {
