@@ -40,5 +40,5 @@ All rights reserved.
 
 ## Contact Information
 For inquiries regarding this license, please contact:
-Ulric
-ulricaird@yahoo.com
+
+[Ulric](mailto://ulricaird@yahoo.com)
