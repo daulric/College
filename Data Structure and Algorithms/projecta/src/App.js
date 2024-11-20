@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import LinkedList from './modules/linkedlist';
 
 // We created the bubble sort algorithm here
-function BubbleSort_Item(arr) {
+/*function BubbleSort_Item(arr) {
   for (let i = 0; i < arr.length; i++) {
     for (let j = i; j < arr.length; j++) {
       if (arr[j].price > arr[i].price) {
@@ -14,47 +15,66 @@ function BubbleSort_Item(arr) {
   }
 
   return arr;
-}
+}*/
 
 const ExpensiveItemTracker = () => {
-  // Here we used a Array Data Structure 
-  const [items, setItems] = useState([]);
+  // Here we used a Linked List Data Structure 
+  const [items, setItems] = useState(new LinkedList());
   const [newItem, setNewItem] = useState({ name: '', price: '' });
   
   useEffect(() => {
-    console.log("running!")
-    let data = localStorage.getItem("items_list")
-    const items_list = data ? JSON.parse(data) : [];
-    setItems(items_list);
-  }, [])
+    let list = new LinkedList();
+    let data = localStorage.getItem("items_list");
+
+    const items_list = JSON.parse(data);
+
+    if (items_list === null || items_list.length === 0) return;
+
+    list.toList(items_list);
+    list.sort((a, b) => a.price > b.price);
+
+    setItems(list);
+  }, []);
 
   const handleAddItem = (e) => {
     e.preventDefault();
     if (newItem.name && newItem.price) {
-      setItems(prev => {
-        let added_items = [...prev, {
-          id: items.length + 1,
-          name: newItem.name,
-          price: parseFloat(newItem.price)
-        }];
+      let new_list = new LinkedList();
 
-        localStorage.setItem('items_list', JSON.stringify(added_items));
-        return added_items;
+      items.transferTo(new_list);
+
+      new_list.push({
+        id: items.size() + 1,
+        name: newItem.name,
+        price: parseFloat(newItem.price)
       });
-  
+
+      new_list.sort((a, b) => a.price > b.price);
+      localStorage.setItem('items_list', JSON.stringify(new_list.toArray()));
+      setItems(new_list);
       setNewItem({ name: '', price: '' });
     }
   };
 
   const handleDeleteItem = (id) => {
-    setItems(prev => {
-      let filtered_items = prev.filter(item => item.id !== id);
-      localStorage.setItem("items_list", JSON.stringify(filtered_items));
-      return filtered_items;
-    });
-  };
 
-  const mostExpensive = BubbleSort_Item(items)[0];
+    let [searched] = items.search({
+      id: id,
+    });
+
+    if (searched === false) return;
+
+    let new_list = new LinkedList();
+
+    items.remove({
+      id: id,
+    });
+
+    items.transferTo(new_list);
+    new_list.sort((a, b) => a.price > b.price);
+    setItems(new_list);
+    localStorage.setItem("items_list", JSON.stringify(new_list.toArray()));
+  };
 
   return (
     <div className="tracker-container">
@@ -86,15 +106,15 @@ const ExpensiveItemTracker = () => {
           </button>
         </form>
 
-        {items.length > 0 ? (
+        {items.size() > 0 ? (
           <div className="items-list">
             <div className="most-expensive-item">
-              <h3>Most Expensive: {mostExpensive.name}</h3>
-              <p>${mostExpensive.price.toLocaleString()}</p>
+              <h3>Most Expensive: {items.first()?.name}</h3>
+              <p>${items.first()?.price.toLocaleString()}</p>
             </div>
 
-            {items.sort((a, b) => b.price - a.price).map(item => (
-              <div key={item.id} className={`item ${item.id === mostExpensive.id ? 'highlight' : ''}`}>
+            {items.toArray().map(item => (
+              <div key={item.id} className={`item ${item.id === items.first()?.id ? 'highlight' : ''}`}>
                 <div>
                   <h3>{item.name}</h3>
                   <p>${item.price.toLocaleString()}</p>
