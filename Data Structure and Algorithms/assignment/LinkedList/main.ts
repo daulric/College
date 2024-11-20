@@ -1,17 +1,19 @@
 import LinkedList from "./modules/linkedlist";
 
-interface User {
-    id: number;
-    name: string;
-}
-
-const list = new LinkedList<User>();
+const head_list = new LinkedList<any>();
 
 for (let i = 0; i < 10; i++) {
-    list.push({
-        id: i,
-        name: `User-${i}`
-    })
+    head_list.push(new LinkedList());
 }
 
-console.log(list.search({name: "User-1"}));
+head_list.print();
+let index = 0;
+head_list.map(list => {
+    index++;
+    
+    for (let i = 0; i < index; i++) {
+        list.push(`User-${i}`);
+    }
+
+    list.print();
+});

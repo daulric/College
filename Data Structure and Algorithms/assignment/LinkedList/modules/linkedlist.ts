@@ -130,7 +130,7 @@ class LinkedList<T> {
             let current = this.#head;
 
             while (current !== null && current.next !== null) {
-                let checked_value = func(current.value, current.next.value);
+                let checked_value = func(current.next.value, current.value);
 
                 if (checked_value) {
                     [current.value, current.next.value] = [current.next.value, current.value];
@@ -161,6 +161,11 @@ class LinkedList<T> {
         }
 
         return [false, null];
+    }
+
+    first() {
+        if (!this.#head) return;
+        return this.#head.value;
     }
 
     insert_start(value: T) {
