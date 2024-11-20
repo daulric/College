@@ -15,6 +15,18 @@ function CreateNode<T>(value: T): ListNode<T> {
     }
 }
 
+function ContainsSameValue(object_1: any, object_2: any) : any {
+    if (object_1 === object_2) return true;
+
+    if (object_1 === null && object_2 === null) return false;
+    if (typeof object_1 !== "object" && typeof object_2 !== "object")  return false;
+
+    const keys =Object.keys(object_2);
+    if (keys.length === 0) return false;
+
+    return keys.every(key => ContainsSameValue(object_1[key], object_2[key]));
+}
+
 class LinkedList<T> {
     #head: ListNode<T> | null = null;
     #size: number = 0;
@@ -88,7 +100,7 @@ class LinkedList<T> {
 
         if (!this.#head) return;
 
-        if (this.#head.value === value) {
+        if (ContainsSameValue(this.#head.value, value)) {
             this.#head = this.#head.next;
             this.#size--;
             return;
@@ -97,7 +109,7 @@ class LinkedList<T> {
         let current: ListNode<T> | null = this.#head;
 
         while (current && current.next) {
-            if (current.next.value === value) {
+            if (ContainsSameValue(current.next.value, value)) {
                 current.next = current.next.next;
                 this.#size--;
                 return;
@@ -132,17 +144,17 @@ class LinkedList<T> {
 
     }
 
-    search(value: T): [boolean, ListNode<T> | null ] {
+    search(value: Partial<T>): [boolean, ListNode<T> | null ] {
         if (!this.#head) return [false, null] ;
 
-        if (this.#head.value === value) {
+        if (ContainsSameValue(this.#head.value, value)) {
             return [true, this.#head];
         }
 
         let current: ListNode<T> | null = this.#head;
 
         while (current !== null) {
-            if (current.value === value) {
+            if (ContainsSameValue(current.value, value)) {
                 return [true, current];
             }
             current = current.next;
@@ -199,6 +211,12 @@ class LinkedList<T> {
         return array;
     }
 
+    toList(array: T[]) {
+        array.map((value) => {
+            this.push(value);
+        })
+    }
+
     map<C>(func: (value: T) => C) : LinkedList<C> {
         const new_list = new LinkedList<C>();
         let current = this.#head;
@@ -210,6 +228,13 @@ class LinkedList<T> {
         }
 
         return new_list;
+    }
+
+    // This is for using this when updating state especially in React.
+    transferTo(list: LinkedList<T>) {
+        this.map((value) => {
+            list.push(value);
+        })
     }
 
 }

@@ -1,16 +1,17 @@
 import LinkedList from "./modules/linkedlist";
-import BinaryTree from "./modules/binarytree";
 
-const list = new LinkedList<number>()
+interface User {
+    id: number;
+    name: string;
+}
 
-list.push(80);
-list.push(74);
-list.push(4);
+const list = new LinkedList<User>();
 
-const tree = new BinaryTree();
-tree.insert(9);
-tree.insert(4);
-tree.insert(2);
-tree.insert(10);
+for (let i = 0; i < 10; i++) {
+    list.push({
+        id: i,
+        name: `User-${i}`
+    })
+}
 
-tree.print();
+console.log(list.search({name: "User-1"}));
