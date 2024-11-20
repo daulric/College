@@ -218,8 +218,8 @@ class LinkedList<T> {
 
     toList(array: T[]) {
         array.map((value) => {
-            this.push(value);
-        })
+            return this.push(value);
+        });
     }
 
     map<C>(func: (value: T) => C) : LinkedList<C> {
@@ -238,8 +238,8 @@ class LinkedList<T> {
     // This is for using this when updating state especially in React.
     transferTo(list: LinkedList<T>) {
         this.map((value) => {
-            list.push(value);
-        })
+            return list.push(value);
+        });
     }
 
 }
