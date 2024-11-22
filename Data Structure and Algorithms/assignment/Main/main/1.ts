@@ -1,4 +1,4 @@
-import LinkedList from "./modules/linkedlist";
+import LinkedList from "../modules/linkedlist";
 
 const head_list = new LinkedList<any>();
 

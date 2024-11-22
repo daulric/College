@@ -168,7 +168,18 @@ class LinkedList<T> {
         return this.#head.value;
     }
 
-    insert_start(value: T) {
+    shift() : ListNode<T> | null {
+        if (this.isEmpty()) return null;
+        if (!this.#head) return null ;
+
+        let removed_node = this.#head;
+        this.#head = this.#head.next;
+        this.#size--;
+
+        return removed_node;
+    }
+
+    unshift(value: T) {
         const node = CreateNode(value);
         
         if (!this.#head) {
