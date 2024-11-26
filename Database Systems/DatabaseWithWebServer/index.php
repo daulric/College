@@ -1,9 +1,9 @@
 <?php
 // Database credentials
-$servername = "DB_HOST";
-$username = "DB_USER";
-$password = "DB_PASS";
-$dbname = "DB_NAME";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "learning_php";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
