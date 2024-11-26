@@ -1,0 +1,19 @@
+{
+    "Lua.diagnostics.globals": [
+        "insertion_sort",
+        "factorial",
+        "f",
+        "b",
+        "d",
+        "a",
+        "c",
+        "e",
+        "g",
+        "h",
+        "i",
+        "x",
+        "x3",
+        "create_pyramid",
+        "display_kilo"
+    ]
+}
