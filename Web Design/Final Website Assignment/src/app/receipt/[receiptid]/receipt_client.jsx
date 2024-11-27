@@ -80,7 +80,7 @@ const OrderReceipt =  ({receiptid}) => {
     doc.text(`${orderData.shippingAddress.city}, ${orderData.shippingAddress.state} ${orderData.shippingAddress.zip}`, 20, finalY + 40);
     
     // Add payment method
-    doc.text(`Payment Method: ${orderData.paymentMethod}`, 20, finalY + 55);
+    doc.text(`Payment Method: 1234`, 20, finalY + 55);
     
     // Add footer
     doc.setFontSize(10);
