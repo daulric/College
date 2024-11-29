@@ -33,6 +33,8 @@ const ShoppingCart = () => {
         }
       })
 
+      if  (!data.orders[0]) return;
+
       setOrderId(data.orders[0].orderid);
       if (!data || !data.success) return;
       if (!data.orders) return;
@@ -47,6 +49,7 @@ const ShoppingCart = () => {
     e.preventDefault();
 
     if (!order_id) return;
+    if (cartItems.length <= 0) return;
 
     await axios.put("/api/order", {
       userid: user_id,

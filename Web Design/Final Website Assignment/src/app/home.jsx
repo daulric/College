@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
@@ -82,17 +82,19 @@ export default function HomePage() {
         {/* Promotions Slider */}
         <section className="mb-12 relative">
           <div className="relative h-[400px] rounded-lg overflow-hidden">
-            <Image
-              src={promotions[currentPromo].image}
-              alt={promotions[currentPromo].title}
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-              <h2 className="text-white text-4xl font-bold text-center px-4">
-                {promotions[currentPromo].title}
-              </h2>
-            </div>
+            <Suspense fallback={<div>loading promo...</div>} >
+              <Image
+                src={promotions[currentPromo].image}
+                alt={promotions[currentPromo].title}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <h2 className="text-white text-4xl font-bold text-center px-4">
+                  {promotions[currentPromo].title}
+                </h2>
+              </div>
+            </Suspense>
           </div>
           <button
             onClick={prevPromo}

@@ -91,83 +91,81 @@ const OrderReceipt =  ({receiptid}) => {
 
   const [loading, setLoading] = useState(false);
 
-  const getOrderData = useCallback(async (receiptid) => {
-    if (loading) return; // Prevent further calls if already loading
-    setLoading(true); // Set loading state
+  useEffect(() => {
 
-    try {
-      const { data: receipt_data } = await axios.get("/api/receipt", {
-        params: { receipt_id: receiptid }
-      });
+    async function getOrderData(receiptid) {
+      if (loading) return; // Prevent further calls if already loading
+      setLoading(true); // Set loading state
 
-      if (!receipt_data || receipt_data.success === false) {
-        console.error("Failed to fetch receipt data");
-        return;
+      try {
+        const { data: receipt_data } = await axios.get("/api/receipt", {
+          params: { receipt_id: receiptid }
+        });
+
+        if (!receipt_data || receipt_data.success === false) {
+          console.error("Failed to fetch receipt data");
+          return;
+        }
+
+        const receipt_info = receipt_data.data;
+        const user = receipt_info.user;
+        const order_info = receipt_info.order_info;
+
+        if (!order_info || !order_info.items) {
+          console.error("Order info or items missing");
+          return;
+        }
+
+        const orders = order_info.items;
+
+        // Subtotal Calculation
+        let subtotal = 0;
+
+        let temp_data_items = orders.map((item) => {
+          let temp_sub_price = item.Price;
+          item.Sub_Price = temp_sub_price;
+
+          item.Price = item.Sub_Price * item.Quantity;
+          subtotal += item.Price;
+
+          return item;
+        });
+
+        const tax_percent = 8; // 8%
+        let tax = subtotal * (tax_percent / 100);
+
+        // Total Calculation
+        let total = subtotal + orderData.shipping + tax;
+
+        // Prepare the order data
+        let temp_data = {
+          orderId: order_info.orderid,
+          items: temp_data_items,
+          subtotal: subtotal,
+          tax: tax,
+          total: total,
+          shippingAddress: {
+            name: user.username,
+            email: user.email,
+            street: "Lucas Street",
+            city: "St. George's",
+            state: "St. George",
+            zip: "12345",
+          },
+          paymentMethod: order_info.paymentMethod,
+        };
+
+        setOrderData(prev => ({ ...prev, ...temp_data }));
+      } catch (error) {
+        console.error("Error fetching or processing order data: ", error);
       }
-
-      const receipt_info = receipt_data.data;
-      const user = receipt_info.user;
-      const order_info = receipt_info.order_info;
-
-      if (!order_info || !order_info.items) {
-        console.error("Order info or items missing");
-        return;
-      }
-
-      const orders = order_info.items;
-
-      // Subtotal Calculation
-      let subtotal = 0;
-
-      let temp_data_items = orders.map((item) => {
-        let temp_sub_price = item.Price;
-        item.Sub_Price = temp_sub_price;
-
-        item.Price = item.Sub_Price * item.Quantity;
-        subtotal += item.Price;
-
-        return item;
-      });
-
-      const tax_percent = 8; // 8%
-      let tax = subtotal * (tax_percent / 100);
-
-      // Total Calculation
-      let total = subtotal + orderData.shipping + tax;
-
-      // Prepare the order data
-      let temp_data = {
-        orderId: order_info.orderid,
-        items: temp_data_items,
-        subtotal: subtotal,
-        tax: tax,
-        total: total,
-        shippingAddress: {
-          name: user.username,
-          email: user.email,
-          street: "Lucas Street",
-          city: "St. George's",
-          state: "St. George",
-          zip: "12345",
-        },
-        paymentMethod: order_info.paymentMethod,
-      };
-
-      setOrderData(prev => ({ ...prev, ...temp_data }));
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching or processing order data: ", error);
     }
 
-  }, [orderData, loading]);
-
-  useEffect(() => {
     if (receiptid) {
       getOrderData(receiptid);
     }
-  }, [receiptid, getOrderData]);
+  }, [receiptid, loading, orderData.shipping]);
   
-
   const generatePDF = () => {
     const docPDF = doc_PDF();
     docPDF.save(`receipt-${orderData.orderId}.pdf`);
