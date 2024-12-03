@@ -1,6 +1,6 @@
 # Restrictive License
 
-Copyright (c) [Year] [Copyright Holder Name]
+Copyright (c) [2024] [Ulric]
 
 All rights reserved.
 
