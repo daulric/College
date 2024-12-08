@@ -14,6 +14,7 @@ const transporter = createTransport({
 
 async function sendEmail(email, info) {
     console.log("incoming email");
+
     try {
         const result = await transporter.sendMail({
             from: `"UA Store" <${process.env.ACC_EMAIL}>`,
@@ -22,10 +23,14 @@ async function sendEmail(email, info) {
             text: info.text,
             html: info.html,
         });
+
         return result.accepted ? result : null;
+
     } catch (error) {
+
         console.error("Send Email Error:", error);
         throw new Error("Failed to send email");
+
     }
 }
 

@@ -36,8 +36,8 @@ const ContactPage = () => {
 
     axios.post("/api/email", {
       info: {
-        title: `Email from ${formData.name} <${formData.email}>`,
-        text: `Subject: ${formData.subject}\n${formData.message}`,
+        title: `Email from ${formData.name} <${formData.email}> || Subject: ${formData.subject}`,
+        text: `${formData.message}`,
       }
     }).then(() => {
       setSubmitted(true);
