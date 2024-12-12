@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import axios from "axios";
-import { redirect } from 'next/navigation';
 import { cookieStore } from '@/tools/cookieClient';
 
 import Image from "next/image";
@@ -16,7 +15,7 @@ const ShoppingCart = () => {
   const [order_id, setOrderId] = useState(null);
   const [user_id, setUserId] = useState(null);
 
-  let quantity_update_timeout;
+  const quantity_update_timeout = useRef(null);
 
   useEffect(() => {
     if (!cookieStore.get("userid")) {
@@ -62,7 +61,7 @@ const ShoppingCart = () => {
         console.log(receipt);
         if (!receipt.data.success) return;
         if (!receipt.data.data) return;
-        redirect(`/receipt/${receipt.data.data.receiptid}`);
+        window.location.href = (`/receipt/${receipt.data.data.receiptid}`);
       });
     });
 
@@ -83,8 +82,13 @@ const ShoppingCart = () => {
     const updated_items = cartItems.map((item) => {
 
       if (item.productid === id) {
-        clearTimeout(quantity_update_timeout);
-        quantity_update_timeout = setTimeout(UpdateOrder, 2000);
+        if (quantity_update_timeout.current) {
+          clearTimeout(quantity_update_timeout.current);
+        }
+        
+        quantity_update_timeout.current = setTimeout(async () => {
+          await UpdateOrder();
+        }, 2000);
         item.Quantity = newQuantity;
       }
 
