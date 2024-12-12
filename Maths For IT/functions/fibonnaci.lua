@@ -4,4 +4,4 @@ local function fibonacci(x)
     return fibonacci(x - 2) + fibonacci(x - 1);
 end
 
-print(fibonacci(2));
+print(fibonacci(10));
