@@ -55,16 +55,15 @@ const ShoppingCart = () => {
       orderid: order_id,
       checked_out: true,
     }).then(async () => {
-      await axios.post("/api/receipt", {
+      const receipt = await axios.post("/api/receipt", {
         orderid: order_id,
-      }).then((receipt) => {
-        console.log(receipt);
-        if (!receipt.data.success) return;
-        if (!receipt.data.data) return;
-        window.location.href = (`/receipt/${receipt.data.data.receiptid}`);
       });
-    });
 
+      if (!receipt.data.success) return;
+      if (!receipt.data.data) return;
+      console.log(receipt);
+      window.location.href = (`/receipt/${receipt.data.data.receiptid}`);
+    });
   }
 
   async function UpdateOrder() {

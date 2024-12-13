@@ -21,19 +21,11 @@ const ProductCard = ({ name, price, image }) => (
         <span className="text-[#4CAF50] font-bold">
           {typeof price === 'number' ? `$${price.toFixed(2)}` : 'Price not available'}
         </span>
-        <button className="bg-[#4CAF50] text-white p-2 rounded-full hover:bg-[#45a049] transition-colors duration-200">
+        <button onClick={() => window.location.href = "/shop"} className="bg-[#4CAF50] text-white p-2 rounded-full hover:bg-[#45a049] transition-colors duration-200">
           <ShoppingCart size={20} />
         </button>
       </div>
     </div>
-  </div>
-)
-
-// Reusable CategoryItem component
-const CategoryItem = ({ name, icon: Icon }) => (
-  <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center hover:bg-[#f0f0f0] transition-colors duration-200 cursor-pointer">
-    <Icon size={40} className="text-[#4CAF50] mb-2" />
-    <span className="text-[#333] font-medium text-center">{name}</span>
   </div>
 )
 
@@ -46,20 +38,11 @@ export default function HomePage() {
   ]
 
   const featuredProducts = [
-    { id: 1, name: "Organic Bananas", price: 1.99, image: "/assets/banana.jpg" },
-    { id: 2, name: "Fresh Milk", price: 2.49, image: "/assets/milk.jpg" },
-    { id: 3, name: "Whole Grain Bread", price: 3.29, image: "/assets/bread.webp" },
-    { id: 4, name: "Free Range Eggs", price: 4.99, image: "/assets/eggs.webp" },
-  ]
-
-  const categories = [
-    { name: "Fruits & Vegetables", icon: () => <span className="text-2xl">🍎</span> },
-    { name: "Dairy & Eggs", icon: () => <span className="text-2xl">🥛</span> },
-    { name: "Bakery", icon: () => <span className="text-2xl">🍞</span> },
-    { name: "Meat & Seafood", icon: () => <span className="text-2xl">🍗</span> },
-    { name: "Frozen Foods", icon: () => <span className="text-2xl">🧊</span> },
-    { name: "Snacks", icon: () => <span className="text-2xl">🍿</span> },
-  ]
+    { id: 1, name: "Organic Bananas", price: 2.60, image: "/assets/banana.jpg" },
+    { id: 2, name: "Fresh Milk", price: 3, image: "/assets/milk.jpg" },
+    { id: 3, name: "Bread", price: 4, image: "/assets/bread.webp" },
+    { id: 4, name: "Eggs", price: 0.6, image: "/assets/eggs.webp" },
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -118,16 +101,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
-        </section>
-
-        {/* Categories */}
-        <section>
-          <h2 className="text-2xl font-bold text-[#333] mb-6">Shop by Category</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {categories.map((category, index) => (
-              <CategoryItem key={index} {...category} />
             ))}
           </div>
         </section>
