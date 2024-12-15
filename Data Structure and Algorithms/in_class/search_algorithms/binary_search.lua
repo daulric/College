@@ -1,10 +1,9 @@
 local function binarySearch(list, target)
     local right = #list;
-    local left = 0;
+    local left = 1;
 
     while (right > left) do
         local mid = left + math.floor(right - left);
-        print("Mid Point:", list[mid]);
 
         if list[mid] == target then
             return mid;
