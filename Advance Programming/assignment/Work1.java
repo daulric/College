@@ -21,12 +21,9 @@ public class Work1 {
         String playerName = s.next();
         System.out.print("Enter Player Position: ");
         int playerScore = s.nextInt();
-
-        displayHighScorePosition(playerName, playerScore);
-
-        System.out.print("Enter Highscore: ");
-        int number = s.nextInt();
-        System.out.println(calculateHighScorePosition(number));
+        
+        int position = calculateHighScorePosition(playerScore);
+        displayHighScorePosition(playerName, position);
         s.close();
     }
 }
