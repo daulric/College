@@ -19,7 +19,7 @@ public class Work1 {
         Scanner s = new Scanner(System.in);
         System.out.print("Enter Player Name: ");
         String playerName = s.next();
-        System.out.print("Enter Player Position: ");
+        System.out.print("Enter Player Score: ");
         int playerScore = s.nextInt();
         
         int position = calculateHighScorePosition(playerScore);
