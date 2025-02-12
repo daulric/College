@@ -12,13 +12,12 @@ public class assignment {
 
         double salary = Double.parseDouble(JOptionPane.showInputDialog("Enter Salary"));
         double reduction = salary * 0.05;
-        double new_salary = salary - reduction;
 
         JOptionPane.showMessageDialog(null, 
         "Name: " + name 
         + "\nAge: " + age 
         + "\nAddress: " + address
-        + "\nSalary After 5% Deduction: $" + new_salary
+        + "\nSalary 5% Deduction: $" + reduction
         );
 
     }
