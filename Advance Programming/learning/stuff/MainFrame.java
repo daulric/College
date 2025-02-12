@@ -13,5 +13,10 @@ public class MainFrame extends JFrame {
         textArea = new JTextArea();
         btn = new JButton("Click Me");
         add(btn, BorderLayout.CENTER);
+        add(textArea);
+    }
+
+    public static void main(String[] args) {
+        new MainFrame();
     }
 }
