@@ -1,4 +1,4 @@
-package InClass;
+//package InClass;
 
 import javax.swing.*;
 
