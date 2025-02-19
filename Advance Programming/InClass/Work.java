@@ -1,5 +1,3 @@
-package InClass;
-
 import javax.swing.*;
 
 public class Work {
