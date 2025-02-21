@@ -43,3 +43,20 @@ int vlan 35
 ip address 192.168.35.5 255.255.255.0
 int vlan 99
 ip address 192.168.99.1 255.255.255.0
+
+
+int vlan 99
+ip add 19.168.99.1 255.255.255.0
+no shut
+
+int vlan 15
+ip add 19.168.15.1 255.255.255.0
+no shut
+
+int vlan 25
+ip add 19.168.25.1 255.255.255.0
+no shut
+
+int vlan 35
+ip add 19.168.35.1 255.255.255.0
+no shut
