@@ -2,7 +2,6 @@ package idCard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 
 public class UserProfileForm extends JFrame {
     private JTextField firstNameField, lastNameField, ageField;
@@ -10,8 +9,8 @@ public class UserProfileForm extends JFrame {
     private JButton upButton, downButton, enterButton, cancelButton, undoButton;
     
     public UserProfileForm() {
-        URL imageUrl = getClass().getResource("cat.jpeg");
-        ImageIcon icon = new ImageIcon(imageUrl);
+        ImageIcon icon = new ImageIcon(getClass().getResource("cat.jpeg"));
+        ImageIcon icon2 = new ImageIcon(getClass().getResource("capy.jpeg"));
         // Set up the frame
         setTitle("User Profile");
         setSize(800, 600);
@@ -70,7 +69,7 @@ public class UserProfileForm extends JFrame {
         picturePanel.setBorder(BorderFactory.createLineBorder(new Color(0, 90, 150), 1));
         picturePanel.setBackground(Color.WHITE);
         
-        JLabel pictureLabel = new JLabel(icon);
+        JLabel pictureLabel = new JLabel(icon2);
         pictureLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         picturePanel.add(pictureLabel);
         
