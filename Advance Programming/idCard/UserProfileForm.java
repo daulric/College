@@ -122,10 +122,12 @@ public class UserProfileForm extends JFrame {
         
         // Center the frame on screen
         setLocationRelativeTo(null);
-        setVisible(true);
     }
     
     public static void main(String[] args) {
-        new UserProfileForm();
+        SwingUtilities.invokeLater(() -> {
+            UserProfileForm form = new UserProfileForm();
+            form.setVisible(true);
+        });
     }
 }
