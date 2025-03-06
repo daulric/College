@@ -25,9 +25,11 @@ public class UserProfileForm extends JFrame {
         headerPanel.setBackground(new Color(0, 120, 190));
         headerPanel.setLayout(new BorderLayout());
         
-        JLabel iconLabel = new JLabel(icon);
+        JLabel iconLabel = new JLabel("Profile");
+        iconLabel.setIcon(icon);
         iconLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        iconLabel.setOpaque(false);
+        iconLabel.setOpaque(true);
+        iconLabel.setBackground(Color.GREEN);
         headerPanel.add(iconLabel, BorderLayout.WEST);
         
         // Create form panel
