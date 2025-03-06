@@ -40,7 +40,7 @@ public class UserProfileForm extends JFrame {
         firstNameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         
         JLabel lastNameLabel = new JLabel("Last Name");
-        lastNameLabel.setBounds(140, 170, 150, 25);
+        lastNameLabel.setBounds(140, 175, 150, 25);
         lastNameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         
         JLabel ageLabel = new JLabel("Age");
@@ -54,7 +54,7 @@ public class UserProfileForm extends JFrame {
         firstNameField.setForeground(Color.WHITE);
         
         lastNameField = new JTextField();
-        lastNameField.setBounds(310, 160, 370, 40);
+        lastNameField.setBounds(310, 170, 370, 40);
         lastNameField.setBackground(new Color(20, 90, 120));
         lastNameField.setForeground(Color.WHITE);
         
@@ -80,22 +80,22 @@ public class UserProfileForm extends JFrame {
         upButton.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 0), 2));
         
         downButton = new JButton("Down");
-        downButton.setBounds(125, 450, 80, 40);
+        downButton.setBounds(125, 431, 80, 40);
         downButton.setBackground(Color.WHITE);
         downButton.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 0), 2));
         
         enterButton = new JButton("Enter");
-        enterButton.setBounds(305, 420, 120, 40);
+        enterButton.setBounds(230, 410, 120, 40);
         enterButton.setBackground(Color.WHITE);
         enterButton.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 0), 2));
         
         cancelButton = new JButton("Cancel");
-        cancelButton.setBounds(530, 420, 120, 40);
+        cancelButton.setBounds(360, 410, 120, 40);
         cancelButton.setBackground(Color.WHITE);
         cancelButton.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 0), 2));
         
         undoButton = new JButton("Undo");
-        undoButton.setBounds(760, 420, 120, 40);
+        undoButton.setBounds(490, 410, 120, 40);
         undoButton.setBackground(Color.WHITE);
         undoButton.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 0), 2));
         
